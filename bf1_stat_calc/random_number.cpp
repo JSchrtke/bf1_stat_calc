@@ -1,4 +1,7 @@
-﻿#include "stdafx.h"
+﻿//random_number.cpp
+//this function generates a random number, currently int
+//TO DO: MAKE THIS GENERATE A double
+#include "stdafx.h"
 #include "random_number.h"
 #include <iostream>
 #include <ctime>

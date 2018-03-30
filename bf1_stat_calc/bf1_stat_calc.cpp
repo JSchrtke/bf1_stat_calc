@@ -1,4 +1,5 @@
 ﻿// bf1_stat_calc.cpp
+//test
 #include "stdafx.h"
 #include "random_number.h"
 #include <iostream>

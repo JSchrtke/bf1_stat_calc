@@ -1,0 +1,23 @@
+Format:
+Probably best as webapp
+Does need to calculate based on user input --> need processing power.
+  -> So website cannot be static, or it has to be a desktop app.
+
+Features:
+  -Hitrate depending on different metrics:
+    -Burst length
+    -distance
+    -weapon stats
+  -ideal bust length and pattern
+  -practical TTK
+    -with comparison between weapons
+    -graphs
+
+  Math:
+    Hitrate:
+      -target size?
+        -circle?
+      - equation for hitrate?
+        -base area of cone/radius of cone base
+        -distance
+        -HREC

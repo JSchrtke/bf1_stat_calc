@@ -22,10 +22,16 @@ Features:
         -distance
         -HREC
         //Base of the Spread(circle) overlaps with target(circle)
-        //need to find out overlap between the two. Using the area of the cirlces?
+        //need to find out overlap between the two. Using the area of the
+          cirlces?
         //HREC will shit the Spread circle an amount to left or right.
         //HREC is an angle, so shift of spread will depend on distance
         //HREC is right-angled triangle. Angle at top given by HREC.
           //Height given by distance to target
           //so use Tangens
           //baselength of that triangle is distance for the spread shift
+TO DO:
+  Add test weapon data
+  make function to calculate area and radius of spread
+  add target; radius and area
+  

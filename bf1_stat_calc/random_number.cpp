@@ -1,17 +1,14 @@
 ﻿//random_number.cpp
-//this function generates a random number, currently int
-//TO DO: MAKE THIS GENERATE A double
 #include "stdafx.h"
 #include "random_number.h"
 #include <iostream>
-#include <ctime>
+#include <random>
 
-
-
-int random_number(int random_number_max)
+double random_number(double rand_num_min, double rand_num_max)
 {
-	srand(time(NULL));
-	int rand_int;
-	rand_int = rand() % random_number_max + 1;
-	return rand_int;
+	std::random_device random;
+	std::mt19937 gen(random());
+	std::uniform_real_distribution<> dis(rand_num_min, rand_num_max);
+	double rand_double = dis(gen);
+	return rand_double;
 }

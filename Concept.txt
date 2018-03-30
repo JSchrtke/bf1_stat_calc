@@ -5,33 +5,32 @@ Does need to calculate based on user input --> need processing power.
 
 Features:
   -Hitrate depending on different metrics:
-    -Burst length
+    Burst length
     -distance
     -weapon stats
-  -ideal bust length and pattern
-  -practical TTK
-    -with comparison between weapons
-    -graphs
+    -ideal bust length and pattern
+    -practical TTK
+      -with comparison between weapons
+      -graphs
 
-  Math:
-    Hitrate:
-      -target size?
-        -circle?
-      - equation for hitrate?
-        -base area of cone/radius of cone base
-        -distance
-        -HREC
-        //Base of the Spread(circle) overlaps with target(circle)
-        //need to find out overlap between the two. Using the area of the
-          cirlces?
-        //HREC will shit the Spread circle an amount to left or right.
-        //HREC is an angle, so shift of spread will depend on distance
-        //HREC is right-angled triangle. Angle at top given by HREC.
-          //Height given by distance to target
-          //so use Tangens
-          //baselength of that triangle is distance for the spread shift
+Math:
+  Hitrate:
+  -target size?
+    -circle?
+  -equation for hitrate?
+  -base area of cone/radius of cone base
+  -distance
+  -HREC
+  //Base of the Spread(circle) overlaps with target(circle)
+  //need to find out overlap between the two. Using the area of the
+    cirlces?
+  //HREC will shit the Spread circle an amount to left or right.
+  //HREC is an angle, so shift of spread will depend on distance
+  //HREC is right-angled triangle. Angle at top given by HREC.
+    //Height given by distance to target
+    //so use Tangens
+    //baselength of that triangle is distance for the spread shift
 TO DO:
   Add test weapon data
   make function to calculate area and radius of spread
   add target; radius and area
-  

@@ -10,8 +10,8 @@ TO DO:
 int main()
 {
 	//x/y coordinates of the center of the target
-	double target_position_x = 0.0;
-	double target_postion_y = 0.0;
+	double target_position_x = -0.0;
+	double target_postion_y = -0.0;
 	
 	//radius of the target circle
 	double target_radius = 1.0;

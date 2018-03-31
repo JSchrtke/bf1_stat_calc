@@ -1,6 +1,5 @@
-﻿#include "hrec.h"
-#include "stdafx.h"
-#include "hrec.h"
+﻿#include "stdafx.h"
+#include "math_functions.h"
 #include <iostream>
 
 const double PI = 3.141592653589793238463;

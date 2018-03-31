@@ -3,7 +3,7 @@
 #include <iostream>
 #include "stdafx.h"
 #include <cmath>
-#include "dist_betw_points.h"
+#include "math_functions.h"
 
 double dist_betw_points(double x_1, double y_1, double x_2, double y_2)
 {

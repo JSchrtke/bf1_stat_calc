@@ -13,6 +13,17 @@ Features:
       -with comparison between weapons
       -graphs
 
+function for a shot simulation
+	-print hitrate for evey bullet in burst
+	  *run simulation for hitrate_sim_count times, store info if nth bullet is a hit,
+    	sum up each bullet amount of hits/misses, give percentage
+			need one var for each shot of the burst within simulation function, 
+      another set for each shot to add 0 or 1 to,
+			so 1 for every hit and 0 for every miss. 
+      then get change by division by hitrate_sim_count
+		*max burst lenght?
+	-burstlenght
+
 Math:
   Hitrate:
   -target size?

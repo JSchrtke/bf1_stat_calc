@@ -1,6 +1,6 @@
 ﻿//random_number.cpp
 #include "stdafx.h"
-#include "random_number.h"
+#include "math_functions.h"
 #include <iostream>
 #include <random>
 

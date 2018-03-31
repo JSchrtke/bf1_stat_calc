@@ -51,6 +51,43 @@ int main()
 	float spread_hip_crouch_move = 2;
 	float spread_hip_prone_move = 1.5;
 
+	//variables for controlling if the main loop is running
+	bool main_loop_running = true;
 
+	//variable for the loop that allows to continue or quit the program
+	char continue_quit_loop = 'y';
+
+	while (main_loop_running)
+	{
+		std::cout << "test: main loop running" << std::endl;
+		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')
+		{
+			std::cout << "do you wan to continue? (Y/N)" << std::endl;
+			std::cin >> continue_quit_loop;
+			switch (continue_quit_loop)
+			{
+			case 'y':
+				main_loop_running = true;
+				continue_quit_loop = 'x';
+				break;
+			case 'Y':
+				main_loop_running = true;
+				continue_quit_loop = 'x';
+				break;
+			case 'n':
+				main_loop_running = false;
+				continue_quit_loop = 'x';
+				break;
+			case 'N':
+				main_loop_running = false;
+				continue_quit_loop = 'x';
+				break;
+			default:
+				std::cout << "Error! Debug info: continue_quit_loop, switch statement default case" << std::endl;
+				break;
+			}
+		}
+			continue_quit_loop = 'y';
+	}
 	return 0;
 }

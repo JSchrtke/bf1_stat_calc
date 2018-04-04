@@ -41,5 +41,8 @@
     <ClCompile Include="hrec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="single_bullet_sim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

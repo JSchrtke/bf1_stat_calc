@@ -55,12 +55,12 @@ int main()
 	double target_position_x = -0.0;
 	double target_postion_y = -0.0;	
 	//radius of the target circle
-	double target_radius = 1.0;	
+	double target_radius = 0.25;	
 	//x/y coordinates of the center of the spread
-	double spread_postion_x = 1.0;
-	double spread_postion_y = 1.0;	
+	double spread_postion_x = 0.0;
+	double spread_postion_y = 0.0;	
 	//radius of the spread
-	double spread_radius = 1.0;
+	double spread_radius = 0.0;
 	//distance to target
 	double distance = 10.0;
 	//magnitude of hrec, this is a random number between hrec_l and hrec_r
@@ -79,21 +79,33 @@ int main()
 	//main program loop
 	while (main_loop_running)
 	{
-		hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
 		cout << "enter burst length: " << endl;
 		cin >> burst_lenght;
 		cout << "how many times do you want to simluate hitrate" << endl;
 		cin >> hitrate_sim_count; //this user input need to be sanitized, probably write function to do that
 
 		//first iteration of what will be the main simulation loop
-		for (int i = 0; i <= hitrate_sim_count; i++) //this loop simluates the hitrate for the # specified by user input
+		for (int i = 0; i < hitrate_sim_count; i++) //this loop simluates the hitrate for the # specified by user input
 		{
 			for (int j = 0; j < burst_lenght; j++) //this loop simulates the hitrate for each bullet in the given burst length, then stores the value in the array (shots_in_burst)
 			{
-				shots_in_burst[j] = 1; //function for single shot sim goes here, instead of 1
-				spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
+				if (j >= 50) //this needs to be the size of shots_in_burst, so the code doesnt break
+				{
+					break;
+				}
+				else
+				{	
+					hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
+					shots_in_burst[j] = 1; //function for single shot sim goes here, instead of 1
+					single_bullet_sim(spread_radius, spread_postion_x, spread_postion_y, target_position_x, target_postion_y);
+					spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
+					spread_radius = spread_radius + weapon_stats[6];
+					cout << "spread_postion_x: " << spread_postion_x << endl;
+					cout << "spread_radius: " << spread_radius << endl;
+				}
 			}
-			spread_postion_x = 1.0;
+			spread_postion_x = 0.0;
+			spread_radius = 0.0;
 		}
 		
 		//prints the results, as in the # of the shot in the burst and if it hit

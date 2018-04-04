@@ -42,6 +42,4 @@ Math:
     //so use Tangens
     //baselength of that triangle is distance for the spread shift
 TO DO:
-  Add test weapon data
-  make function to calculate area and radius of spread
-  add target; radius and area
+-create function for shot simulation

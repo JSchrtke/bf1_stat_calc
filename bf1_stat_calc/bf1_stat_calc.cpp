@@ -59,7 +59,7 @@ int main()
 	//variable to specify how many times the simulation runs
 	int hitrate_sim_count = 1;
 
-	//variables for number of shots in burst
+	//variables for number of shots in burst USE ARRAYS FOR THIS!!!!!!
 	int s_1 = 0;
 	//main program loop
 	while (main_loop_running)
@@ -108,7 +108,7 @@ int main()
 				continue_quit_loop = 'x';
 				break;
 			default:
-				cout << "Error! Debug info: continue_quit_loop, switch statement default case" << endl;
+				cout << "Error! Debug info: continue_quit_loop, line 111, switch statement default case" << endl;
 				break;
 			}
 		}

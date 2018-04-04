@@ -5,69 +5,83 @@ TO DO:
 #include "stdafx.h"
 #include "math_functions.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 int main()
 {
-	//Weapon stat variables
-	int rpm = 359;
-	int muz_vel = 660;
-	int mag_size = 5;
-	float deploy_time = 0.7;
-	float hrec_r = 0.15;
-	float hrec_l = -0.15;
-	float sips = 0.062;
-	float fssm_ads = 1;
-	float fssm_hip = 1;
-	float spread_dec = 3.75;
-	float spread_ads_not_move = 0.12;
-	float spread_ads_move = 0.82;
-	float spread_hip_stand_not_move = 2;
-	float spread_hip_crouch_not_move = 1.5;
-	float spread_hip_prone_not_move = 1;
-	float spread_hip_stand_move = 2.5;
-	float spread_hip_crouch_move = 2;
-	float spread_hip_prone_move = 1.5;
-
+	//weapon stat array
+	double weapon_stats[18];
+	weapon_stats[0] = 359; //Firerate
+	weapon_stats[1] = 660; //Muzzle Velocity
+	weapon_stats[2] = 5; //mag size
+	weapon_stats[3] = 0.7; //deploy time
+	weapon_stats[4] = 0.15; //hrec right
+	weapon_stats[5] = -0.15; //hrec left
+	weapon_stats[6] = 0.062; //SIPS
+	weapon_stats[7] = 1; //fssm ads
+	weapon_stats[8] = 1; //fssm hip
+	weapon_stats[9] = 3.75; //spread decrease
+	weapon_stats[10] = 0.12; //spread ads not moving
+	weapon_stats[11] = 0.82; //spread ads moving
+	weapon_stats[12] = 2; //spread hip standing not moving
+	weapon_stats[13] = 1.5; //spread hip crouch not moving
+	weapon_stats[14] = 1; //spread hip prone not moving
+	weapon_stats[15] = 2.5; //spread hip standing moving
+	weapon_stats[16] = 2; //spread hip crouch moving
+	weapon_stats[17] = 1.5; //spread hip prone moving
+	//weapon stat name array
+	string weapon_stat_names[18];
+	weapon_stat_names[0] = "Firerate: ";
+	weapon_stat_names[1] = "Muzzle velocity: ";
+	weapon_stat_names[2] = "mag size: ";
+	weapon_stat_names[3] = "deploy time: ";
+	weapon_stat_names[4] = "hrec right: ";
+	weapon_stat_names[5] = "hrec left: ";
+	weapon_stat_names[6] = "sips: ";
+	weapon_stat_names[7] = "fssm ads: ";
+	weapon_stat_names[8] = "fssm hip: ";
+	weapon_stat_names[9] = "spread decrease: ";
+	weapon_stat_names[10] = "spread ads not moving: ";
+	weapon_stat_names[11] = "spread ads moving: ";
+	weapon_stat_names[12] = "spread hip stand not moving: ";
+	weapon_stat_names[13] = "spread hip crouch not moving: ";
+	weapon_stat_names[14] = "spread hip prone not moving: ";
+	weapon_stat_names[15] = "spread hip standing moving: ";
+	weapon_stat_names[16] = "spread hip crouch moving: ";
+	weapon_stat_names[17] = "spread hip prone moving: ";
 	//x/y coordinates of the center of the target
 	double target_position_x = -0.0;
-	double target_postion_y = -0.0;
-	
+	double target_postion_y = -0.0;	
 	//radius of the target circle
-	double target_radius = 1.0;
-	
+	double target_radius = 1.0;	
 	//x/y coordinates of the center of the spread
 	double spread_postion_x = 1.0;
-	double spread_postion_y = 1.0;
-	
+	double spread_postion_y = 1.0;	
 	//radius of the spread
 	double spread_radius = 1.0;
-
 	//distance to target
 	double distance = 10.0;
-
 	//magnitude of hrec, this is a random number between hrec_l and hrec_r
 	double hrec_magnitude;
-	
-
 	//variables for controlling if the main loop is running
 	bool main_loop_running = true;
-
 	//variable for the loop that allows to continue or quit the program
 	char continue_quit_loop = 'y';
-
 	//variable to specify how many times the simulation runs
 	int hitrate_sim_count = 1;
-
 	//variables for number of shots in burst USE ARRAYS FOR THIS!!!!!!
 	int s_1 = 0;
+
 	//main program loop
 	while (main_loop_running)
 	{
-		hrec_magnitude = random_number(hrec_l, hrec_r);
+		hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
 
+		cout << "weapon stats: " << weapon_stat_names[0] << weapon_stats[0] << endl;
+		cout << "hrec_magnitude: " << hrec_magnitude << endl;
 		cout << "how many times do you want to simluate hitrate" << endl;
-		cin >> hitrate_sim_count; //this user input need to be sanitized, probably write finction to do that
+		cin >> hitrate_sim_count; //this user input need to be sanitized, probably write function to do that
 
 		for (int i = 0; i < hitrate_sim_count; i++)
 		{
@@ -79,15 +93,16 @@ int main()
 		}
 
 		cout << "Results: " << endl;
-		cout << "Debug info: s_1 = " << s_1 << "line 82, remove when done" << endl; //debug info, remove when done
+		cout << "Debug info: s_1 = " << s_1 << " line 82, remove when done" << endl; //debug info, remove when done
 		cout << "s_1: ";
 		cout << (s_1 / hitrate_sim_count) * 100;
 		cout << "%" << endl;
+		s_1 = 0;
 
 		// this loop just controls if the user wants to quit
 		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')
 		{
-			cout << "do you wan to continue? (Y/N)" << endl;
+			cout << "do you want to continue? (Y/N)" << endl;
 			cin >> continue_quit_loop;
 			switch (continue_quit_loop)
 			{

@@ -1,6 +1,7 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TO DO:
+-make the function to calculate the hitrate for each individual bullet in a burst
 */
 #include "stdafx.h"
 #include "math_functions.h"
@@ -70,34 +71,41 @@ int main()
 	char continue_quit_loop = 'y';
 	//variable to specify how many times the simulation runs
 	int hitrate_sim_count = 1;
-	//variables for number of shots in burst USE ARRAYS FOR THIS!!!!!!
-	int s_1 = 0;
+	//array for individual bullets that hit/miss in a burst
+	int shots_in_burst[50];
+	//stores burst lenght
+	int burst_lenght = 5;
 
 	//main program loop
 	while (main_loop_running)
 	{
 		hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
-
-		cout << "weapon stats: " << weapon_stat_names[0] << weapon_stats[0] << endl;
-		cout << "hrec_magnitude: " << hrec_magnitude << endl;
+		cout << "enter burst length: " << endl;
+		cin >> burst_lenght;
 		cout << "how many times do you want to simluate hitrate" << endl;
 		cin >> hitrate_sim_count; //this user input need to be sanitized, probably write function to do that
 
-		for (int i = 0; i < hitrate_sim_count; i++)
+		//first iteration of what will be the main simulation loop
+		for (int i = 0; i <= hitrate_sim_count; i++) //this loop simluates the hitrate for the # specified by user input
 		{
-			s_1 = s_1 + 1; //function for single shot sim goes here, instead of 1
-			spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
-			//continues like this:
-			//s_n = s_n + single shot function
-			//spread_position_x = spread_position_x + hrec(distance, hrec_magnitude);
+			for (int j = 0; j < burst_lenght; j++) //this loop simulates the hitrate for each bullet in the given burst length, then stores the value in the array (shots_in_burst)
+			{
+				shots_in_burst[j] = 1; //function for single shot sim goes here, instead of 1
+				spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
+			}
+			spread_postion_x = 1.0;
 		}
-
+		
+		//prints the results, as in the # of the shot in the burst and if it hit
+		//1 = hit, 0 = miss
 		cout << "Results: " << endl;
-		cout << "Debug info: s_1 = " << s_1 << " line 82, remove when done" << endl; //debug info, remove when done
-		cout << "s_1: ";
-		cout << (s_1 / hitrate_sim_count) * 100;
-		cout << "%" << endl;
-		s_1 = 0;
+		for (int k = 0; k < burst_lenght; k++)
+		{
+			cout << "shot #";
+			cout << k + 1;
+			cout << ": ";
+			cout << shots_in_burst[k] << endl;
+		}
 
 		// this loop just controls if the user wants to quit
 		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')

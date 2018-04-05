@@ -1,41 +1,52 @@
 //single_bullet_sim.cpp
 /*
-Note: if shot_radius <= spread_radius && target_to_shot_radius <= target_radius
-	{
-		the shot is in the intersection between the circles
-	}
-*/
-/*
 TO DO:
-- put in cases for 0, 180 and 360°
 */
 #include "stdafx.h"
 #include "math_functions.h"
 #include <iostream>
+#include <cmath>
 
 const double PI = 3.141592653589793238463;
 
-int single_bullet_sim(double spread_radius, double spread_position_x, double spread_position_y, double target_position_x, double target_position_y, double target_radius)
+double single_bullet_sim(double target_position_x, double target_position_y,double target_radius,
+	double spread_position_x, double spread_position_y, double spread_radius)
 {
-	double shot_angle; //random angle to determine position of shot within the spread circle
-	double shot_radius; //random radius to determine position of shot within spread circle
-	double target_to_shot_radius; //distance from the center of the target circle to the point of the randonly picked shot
-	double dist_betw_circles; //determines the distance between th centers of the two circles
-	double h; //height of the triangle formed by connecting the point of the shot with the centers of the circles
-	double result; //determines if the shot hits/misses 1 = hit, 0 = miss
-
-	shot_radius = (sqrt(random_number(0, 1))) * spread_radius;
-	shot_angle = random_number(0, 359.9999999999999);
-	dist_betw_circles = dist_betw_points(spread_position_x, spread_position_y, target_position_x, target_position_y);
-	h = tan(shot_angle * (PI / 180)) * shot_radius;
-	target_to_shot_radius = sqrt((dist_betw_circles - sqrt(shot_radius * shot_radius + h * h) * (dist_betw_circles - sqrt(shot_radius * shot_radius + h * h))) + (h * h));
-	if (shot_radius <= spread_radius && target_to_shot_radius <= target_radius)
+	double result;
+	double dist_circles = dist_betw_points(target_position_x, target_position_y, spread_position_x, spread_position_y);
+	double d_1;
+	double d_2;
+	double t_r_sq = target_radius * target_radius;
+	double s_r_sq = spread_radius * spread_radius;
+	double d_c_sq = dist_circles * dist_circles;
+	double intersect_area;
+	double hit_miss; //hitchance
+	if (dist_circles <= target_radius && dist_circles + spread_radius <= target_radius)
 	{
-		result = 1;
+		std::cout << "hit_miss should be 1; dist_circles <= target_radius && dist_circles + spread_radius <= target_radius" << std::endl;
+		hit_miss = 1;
+	}
+	else if (dist_circles > target_radius && target_radius + spread_radius >= dist_circles)
+	{
+		std::cout << "hit_miss should be 0; dist_circles > target_radius && target_radius + spread_radius >= dist_circles" << std::endl;
+		hit_miss = 0;
+	}
+	else if (spread_radius >= target_radius && dist_circles + target_radius <= spread_radius)
+	{
+		std::cout << "hit_miss determined by t_r_sq / s_r_sq; spread_radius >= target_radius && dist_circles + target_radius <= spread_radius" << std::endl;
+		hit_miss = t_r_sq / s_r_sq;
 	}
 	else
 	{
-		result = 0;
+		std::cout << "hit miss calculated by maths (4th case)"; //debug line, remove when functional
+		intersect_area = s_r_sq * acos((d_c_sq + s_r_sq - t_r_sq) / (2 * dist_circles * spread_radius)) +
+			t_r_sq * acos((d_c_sq + t_r_sq - s_r_sq) / (2 * dist_circles * target_radius)) -
+			0.5 * sqrt((-dist_circles + spread_radius + target_radius) *
+			(dist_circles + spread_radius - target_radius) *
+				(dist_circles - spread_radius + target_radius) *
+				(dist_circles + spread_radius + target_radius));
+
+		hit_miss = intersect_area / (PI * s_r_sq);
 	}
-	return result;
+	return hit_miss;
 }

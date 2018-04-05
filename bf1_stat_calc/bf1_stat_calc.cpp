@@ -1,7 +1,12 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TO DO:
--make the function to calculate the hitrate for each individual bullet in a burst
+- l113/114: spread reset needs to be different
+- spread_radius needs to be calculated from the actual weapon spread values
+- spread increase need to be aplied correctly to the spread_radius after sim run
+- chances for hits need to be saved in the corresponding array, l105
+	*that array needs to be 2D so it can save the numbers from multiple sim runs
+-
 */
 #include "stdafx.h"
 #include "math_functions.h"
@@ -52,15 +57,15 @@ int main()
 	weapon_stat_names[16] = "spread hip crouch moving: ";
 	weapon_stat_names[17] = "spread hip prone moving: ";
 	//x/y coordinates of the center of the target
-	double target_position_x = -0.0;
-	double target_postion_y = -0.0;	
+	double target_position_x = 0.0;
+	double target_postion_y = 0.0;	
 	//radius of the target circle
-	double target_radius = 0.25;	
+	double target_radius = 1.00;	
 	//x/y coordinates of the center of the spread
-	double spread_postion_x = 0.0;
+	double spread_postion_x = 0.8079455;
 	double spread_postion_y = 0.0;	
 	//radius of the spread
-	double spread_radius = 0.0;
+	double spread_radius = 1.0;
 	//distance to target
 	double distance = 10.0;
 	//magnitude of hrec, this is a random number between hrec_l and hrec_r
@@ -75,6 +80,8 @@ int main()
 	int shots_in_burst[50];
 	//stores burst lenght
 	int burst_lenght = 5;
+	//distance between the centers of the two circles
+	double dist_circle;
 
 	//main program loop
 	while (main_loop_running)
@@ -96,15 +103,20 @@ int main()
 				else
 				{	
 					hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
-					shots_in_burst[j] = single_bullet_sim(spread_radius, spread_postion_x, spread_postion_y, target_position_x, target_postion_y, target_radius);
-					spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
-					spread_radius = spread_radius + weapon_stats[6];
+					/*shots_in_burst[j] = single_bullet_sim(target_position_x, target_postion_y, target_radius,
+						spread_postion_x, spread_postion_y, spread_radius);*/
+					
+					cout << "hit_miss: \n" << single_bullet_sim(target_position_x, target_postion_y, target_radius,
+						spread_postion_x, spread_postion_y, spread_radius) << endl;
+
 					cout << "spread_postion_x: " << spread_postion_x << endl;
 					cout << "spread_radius: " << spread_radius << endl;
+					spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
+					spread_radius;
 				}
 			}
-			spread_postion_x = 0.0;
-			spread_radius = 0.0;
+			spread_postion_x = 0.8079455;
+			spread_radius = 1.0;
 					//prints the results, as in the # of the shot in the burst and if it hit
 					//1 = hit, 0 = miss
 					cout << "Results: " << endl;

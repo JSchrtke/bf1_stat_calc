@@ -96,8 +96,7 @@ int main()
 				else
 				{	
 					hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
-					shots_in_burst[j] = 1; //function for single shot sim goes here, instead of 1
-					single_bullet_sim(spread_radius, spread_postion_x, spread_postion_y, target_position_x, target_postion_y);
+					shots_in_burst[j] = single_bullet_sim(spread_radius, spread_postion_x, spread_postion_y, target_position_x, target_postion_y, target_radius);
 					spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
 					spread_radius = spread_radius + weapon_stats[6];
 					cout << "spread_postion_x: " << spread_postion_x << endl;
@@ -106,19 +105,18 @@ int main()
 			}
 			spread_postion_x = 0.0;
 			spread_radius = 0.0;
+					//prints the results, as in the # of the shot in the burst and if it hit
+					//1 = hit, 0 = miss
+					cout << "Results: " << endl;
+					for (int k = 0; k < burst_lenght; k++)
+					{
+						cout << "shot #";
+						cout << k + 1;
+						cout << ": ";
+						cout << shots_in_burst[k] << endl;
+					}
 		}
 		
-		//prints the results, as in the # of the shot in the burst and if it hit
-		//1 = hit, 0 = miss
-		cout << "Results: " << endl;
-		for (int k = 0; k < burst_lenght; k++)
-		{
-			cout << "shot #";
-			cout << k + 1;
-			cout << ": ";
-			cout << shots_in_burst[k] << endl;
-		}
-
 		// this loop just controls if the user wants to quit
 		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')
 		{

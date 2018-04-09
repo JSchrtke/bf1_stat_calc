@@ -23,29 +23,28 @@ double single_bullet_sim(double target_position_x, double target_position_y,doub
 	double hit_miss; //hitchance
 	if (dist_circles <= target_radius && dist_circles + spread_radius <= target_radius)
 	{
-		std::cout << "hit_miss should be 1; dist_circles <= target_radius && dist_circles + spread_radius <= target_radius" << std::endl;
+		//std::cout << "case 1: spread entirely in target" << std::endl;
 		hit_miss = 1;
 	}
 	else if (dist_circles > target_radius && target_radius + spread_radius >= dist_circles)
 	{
-		std::cout << "hit_miss should be 0; dist_circles > target_radius && target_radius + spread_radius >= dist_circles" << std::endl;
+		//std::cout << "case 2: spread entirely outside target" << std::endl;
 		hit_miss = 0;
 	}
 	else if (spread_radius >= target_radius && dist_circles + target_radius <= spread_radius)
 	{
-		std::cout << "hit_miss determined by t_r_sq / s_r_sq; spread_radius >= target_radius && dist_circles + target_radius <= spread_radius" << std::endl;
+		//std::cout << "case 3: target entirely in spread && spread larger than target" << std::endl;
 		hit_miss = t_r_sq / s_r_sq;
 	}
 	else
 	{
-		std::cout << "hit miss calculated by maths (4th case)" << std::endl; //debug line, remove when functional
+		//std::cout << "case 4: overlap between spread & target" << std::endl;
 		intersect_area = s_r_sq * acos((d_c_sq + s_r_sq - t_r_sq) / (2 * dist_circles * spread_radius)) +
 			t_r_sq * acos((d_c_sq + t_r_sq - s_r_sq) / (2 * dist_circles * target_radius)) -
 			0.5 * sqrt((-dist_circles + spread_radius + target_radius) *
 			(dist_circles + spread_radius - target_radius) *
 				(dist_circles - spread_radius + target_radius) *
 				(dist_circles + spread_radius + target_radius));
-
 		hit_miss = intersect_area / (PI * s_r_sq);
 	}
 	return hit_miss;

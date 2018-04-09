@@ -1,17 +1,16 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TO DO:
--sanitize user input for hitrate_sim_count
-- l113/114: spread reset needs to be different
-- spread_radius needs to be calculated from the actual weapon spread values
-- spread increase need to be aplied correctly to the spread_radius after sim run
-- chances for hits need to be saved in the corresponding array, l105
-	*that array needs to be 2D so it can save the numbers from multiple sim runs
--needs to handle max spread size
--implement hrec mechanic for PS2
+-add manual input for weapon stats
 -needs to handle fssm
 -add stat changes due to stances
 -spread_radius variable calculation before the burst loop needs to have another variable so it can use stances
+-sanitize user input for hitrate_sim_count
+-shots_in_burst and results arrays need to be dynamic in lenght
+	*probably use vectors for this
+-needs to handle max spread size
+-implement hrec mechanic for PS2
+-need to add stat changes dues to hip/ads
 */
 #include "stdafx.h"
 #include "math_functions.h"
@@ -81,26 +80,29 @@ int main()
 	char continue_quit_loop = 'y';
 	//variable to specify how many times the simulation runs
 	int hitrate_sim_count = 1;
-	//array for individual bullets that hit/miss in a burst
-	int shots_in_burst[50];
+	//array for storing the results of individual bullets that hit/miss in a burst; first index = sim runs, second = shots in the burst
+	double shots_in_burst[2500][50];
+	//array that stores the results
+	double results[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	//stores burst lenght
 	int burst_lenght = 5;
 	//distance between the centers of the two circles
 	double dist_circle;
+	//counts the # of sim runs
+	int sim_counter = 0;
 
 	//main program loop
 	while (main_loop_running)
 	{
-		std::cout << "enter burst length: " << endl;
+		cout << "enter burst length: " << endl;
 		cin >> burst_lenght;
-		std::cout << "how many times do you want to simluate hitrate" << endl;
+		cout << "how many times do you want to simluate hitrate" << endl;
 		cin >> hitrate_sim_count;
 
 		//first iteration of what will be the main simulation loop
 		for (int i = 0; i < hitrate_sim_count; i++) //this loop simluates the hitrate for the # specified by user input
 		{
 			spread_radius = offset(distance, weapon_stats[10]);
-			std::cout << "spread_radius: " << spread_radius << endl;
 			for (int j = 0; j < burst_lenght; j++) //this loop simulates the hitrate for each bullet in the given burst length, then stores the value in the array (shots_in_burst)
 			{
 				if (j >= 50) //this needs to be the size of shots_in_burst, so the code doesnt break
@@ -111,34 +113,57 @@ int main()
 				else
 				{	
 					hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
-					
-					std::cout << "hit_miss: " << single_bullet_sim(target_position_x, target_postion_y, target_radius,
-						spread_postion_x, spread_postion_y, spread_radius) << endl;
-
-					std::cout << "spread_postion_x: " << spread_postion_x << endl;
-					std::cout << "spread_radius: " << spread_radius << endl;
+					shots_in_burst[sim_counter][j] = single_bullet_sim(target_position_x, target_postion_y, target_radius,
+						spread_postion_x, spread_postion_y, spread_radius);
 					spread_postion_x = spread_postion_x + offset(distance, hrec_magnitude);
 					spread_radius = spread_radius + offset(distance, weapon_stats[6]);
 				}
 			}
+			sim_counter++;
 			spread_postion_x = 0.0;
 			spread_radius = 0.0;
-					//prints the results, as in the # of the shot in the burst and if it hit
-					//1 = hit, 0 = miss
-					std::cout << "Results: " << endl;
-					for (int k = 0; k < burst_lenght; k++)
-					{
-						std::cout << "shot #";
-						std::cout << k + 1;
-						std::cout << ": ";
-						std::cout << shots_in_burst[k] << endl;
-					}
 		}
-		
+		/*prints results for indivdual columns of the shots_in_burst array, for debug purpose;
+		adds up all the results from the sim runs and stores them in the results array*/
+		for (int l = 0; l < sim_counter; l++)
+		{
+			//cout << "shots_in_burst column #: " << l << endl;
+			for (int k = 0; k < burst_lenght; k++)
+			{
+				/*cout << "shot #";
+				cout << k + 1;
+				cout << ": ";
+				cout << shots_in_burst[l][k] << endl;*/
+				results[k] = results[k] + shots_in_burst[l][k];
+			}
+		}
+		for (int k = 0; k < burst_lenght; k++)
+		{
+			results[k] = results[k] / sim_counter;
+		}
+
+		//prints the final results
+		cout << "final results" << endl;
+		for (int k = 0; k < burst_lenght; k++)
+		{
+			cout << "shot #";
+			cout << k + 1;
+			cout << ": ";
+			cout << results[k] * 100;
+			cout << " %" << endl;
+		}
+
+		//resets the results array after printing the results
+		for (int k = 0; k < burst_lenght; k++)
+		{
+			results[k] = 0;
+		}
+		sim_counter = 0;	
+
 		// this loop just controls if the user wants to quit
 		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')
 		{
-			std::cout << "do you want to continue? (Y/N)" << endl;
+			cout << "do you want to continue? (Y/N)" << endl;
 			cin >> continue_quit_loop;
 			switch (continue_quit_loop)
 			{
@@ -159,7 +184,7 @@ int main()
 				continue_quit_loop = 'x';
 				break;
 			default:
-				std::cout << "Error! Debug info: continue_quit_loop, line 111, switch statement default case" << endl;
+				cout << "Error! Debug info: continue_quit_loop, line 111, switch statement default case" << endl;
 				break;
 			}
 		}

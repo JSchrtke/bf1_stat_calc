@@ -91,12 +91,21 @@ int main()
 	//counts the # of sim runs
 	int sim_counter = 0;
 
+	//manual weapon stat input
+	cout << "Please enter the weapon stats" << endl;
+	for (int i = 0; i <= 17; i++)
+	{
+		cout << weapon_stat_names[i];
+		cin >> weapon_stats[i];
+	}
 	//main program loop
 	while (main_loop_running)
 	{
-		cout << "enter burst length: " << endl;
+		cout << "enter the distance: ";
+		cin >> distance;
+		cout << "enter burst length: ";
 		cin >> burst_lenght;
-		cout << "how many times do you want to simluate hitrate" << endl;
+		cout << "enter simulation run count: ";
 		cin >> hitrate_sim_count;
 
 		//first iteration of what will be the main simulation loop
@@ -184,7 +193,7 @@ int main()
 				continue_quit_loop = 'x';
 				break;
 			default:
-				cout << "Error! Debug info: continue_quit_loop, line 111, switch statement default case" << endl;
+				cout << "Error!" << endl;
 				break;
 			}
 		}

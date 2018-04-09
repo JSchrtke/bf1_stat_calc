@@ -1,7 +1,6 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TO DO:
--add manual input for weapon stats
 -needs to handle fssm
 -add stat changes due to stances
 -spread_radius variable calculation before the burst loop needs to have another variable so it can use stances
@@ -11,35 +10,38 @@ TO DO:
 -needs to handle max spread size
 -implement hrec mechanic for PS2
 -need to add stat changes dues to hip/ads
+-hrec_left (weapon_stats[5]) needs to be converted to a negative number
 */
 #include "stdafx.h"
 #include "math_functions.h"
 #include <iostream>
 #include <string>
+//#define DEBUG
+#define MANUAL_STAT_INPUT
 using namespace std;
 
 int main()
 {
 	//weapon stat array
 	double weapon_stats[18];
-	weapon_stats[0] = 359; //Firerate
-	weapon_stats[1] = 660; //Muzzle Velocity
-	weapon_stats[2] = 5; //mag size
+	weapon_stats[0] = 299; //Firerate
+	weapon_stats[1] = 700; //Muzzle Velocity
+	weapon_stats[2] = 10; //mag size
 	weapon_stats[3] = 0.7; //deploy time
-	weapon_stats[4] = 0.15; //hrec right
-	weapon_stats[5] = -0.15; //hrec left
+	weapon_stats[4] = 0.4; //hrec right
+	weapon_stats[5] = -0.4; //hrec left
 	weapon_stats[6] = 0.1; //SIPS
 	weapon_stats[7] = 1; //fssm ads
 	weapon_stats[8] = 1; //fssm hip
-	weapon_stats[9] = 3.75; //spread decrease
-	weapon_stats[10] = 0.1; //spread ads not moving
+	weapon_stats[9] = 3; //spread decrease
+	weapon_stats[10] = 0.18; //spread ads not moving
 	weapon_stats[11] = 0.82; //spread ads moving
-	weapon_stats[12] = 2; //spread hip standing not moving
-	weapon_stats[13] = 1.5; //spread hip crouch not moving
-	weapon_stats[14] = 1; //spread hip prone not moving
-	weapon_stats[15] = 2.5; //spread hip standing moving
-	weapon_stats[16] = 2; //spread hip crouch moving
-	weapon_stats[17] = 1.5; //spread hip prone moving
+	weapon_stats[12] = 1; //spread hip standing not moving
+	weapon_stats[13] = 0.75; //spread hip crouch not moving
+	weapon_stats[14] = 0.5; //spread hip prone not moving
+	weapon_stats[15] = 1.5; //spread hip standing moving
+	weapon_stats[16] = 1.2; //spread hip crouch moving
+	weapon_stats[17] = 0.9; //spread hip prone moving
 	//weapon stat name array
 	string weapon_stat_names[18];
 	weapon_stat_names[0] = "Firerate: ";
@@ -92,20 +94,23 @@ int main()
 	int sim_counter = 0;
 
 	//manual weapon stat input
+#ifdef MANUAL_STAT_INPUT
 	cout << "Please enter the weapon stats" << endl;
 	for (int i = 0; i <= 17; i++)
 	{
 		cout << weapon_stat_names[i];
 		cin >> weapon_stats[i];
 	}
+#endif // MANUAL_STAT_INPUT
+
 	//main program loop
 	while (main_loop_running)
 	{
 		cout << "enter the distance: ";
 		cin >> distance;
-		cout << "enter burst length: ";
+		cout << "enter burst length(max. 50): ";
 		cin >> burst_lenght;
-		cout << "enter simulation run count: ";
+		cout << "enter simulation run count(max. 2500): ";
 		cin >> hitrate_sim_count;
 
 		//first iteration of what will be the main simulation loop
@@ -132,17 +137,13 @@ int main()
 			spread_postion_x = 0.0;
 			spread_radius = 0.0;
 		}
+
 		/*prints results for indivdual columns of the shots_in_burst array, for debug purpose;
 		adds up all the results from the sim runs and stores them in the results array*/
 		for (int l = 0; l < sim_counter; l++)
 		{
-			//cout << "shots_in_burst column #: " << l << endl;
 			for (int k = 0; k < burst_lenght; k++)
 			{
-				/*cout << "shot #";
-				cout << k + 1;
-				cout << ": ";
-				cout << shots_in_burst[l][k] << endl;*/
 				results[k] = results[k] + shots_in_burst[l][k];
 			}
 		}

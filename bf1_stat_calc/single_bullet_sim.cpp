@@ -38,7 +38,7 @@ double single_bullet_sim(double target_position_x, double target_position_y,doub
 	}
 	else
 	{
-		std::cout << "hit miss calculated by maths (4th case)"; //debug line, remove when functional
+		std::cout << "hit miss calculated by maths (4th case)" << std::endl; //debug line, remove when functional
 		intersect_area = s_r_sq * acos((d_c_sq + s_r_sq - t_r_sq) / (2 * dist_circles * spread_radius)) +
 			t_r_sq * acos((d_c_sq + t_r_sq - s_r_sq) / (2 * dist_circles * target_radius)) -
 			0.5 * sqrt((-dist_circles + spread_radius + target_radius) *

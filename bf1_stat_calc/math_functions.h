@@ -1,7 +1,7 @@
 ﻿#ifndef math_functions_h_
 #define math_functions_h_
 // hrec horizontal offset function
-double hrec(double distance, double hrec_magnitude);
+double offset(double distance, double angle);
 
 //function to calculate the distance between 2 points in cartesian coordinate system
 double dist_betw_points(double x_1, double y_1, double x_2, double y_2);

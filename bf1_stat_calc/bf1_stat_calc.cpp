@@ -1,12 +1,17 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TO DO:
+-sanitize user input for hitrate_sim_count
 - l113/114: spread reset needs to be different
 - spread_radius needs to be calculated from the actual weapon spread values
 - spread increase need to be aplied correctly to the spread_radius after sim run
 - chances for hits need to be saved in the corresponding array, l105
 	*that array needs to be 2D so it can save the numbers from multiple sim runs
--
+-needs to handle max spread size
+-implement hrec mechanic for PS2
+-needs to handle fssm
+-add stat changes due to stances
+-spread_radius variable calculation before the burst loop needs to have another variable so it can use stances
 */
 #include "stdafx.h"
 #include "math_functions.h"
@@ -24,11 +29,11 @@ int main()
 	weapon_stats[3] = 0.7; //deploy time
 	weapon_stats[4] = 0.15; //hrec right
 	weapon_stats[5] = -0.15; //hrec left
-	weapon_stats[6] = 0.062; //SIPS
+	weapon_stats[6] = 0.1; //SIPS
 	weapon_stats[7] = 1; //fssm ads
 	weapon_stats[8] = 1; //fssm hip
 	weapon_stats[9] = 3.75; //spread decrease
-	weapon_stats[10] = 0.12; //spread ads not moving
+	weapon_stats[10] = 0.1; //spread ads not moving
 	weapon_stats[11] = 0.82; //spread ads moving
 	weapon_stats[12] = 2; //spread hip standing not moving
 	weapon_stats[13] = 1.5; //spread hip crouch not moving
@@ -60,14 +65,14 @@ int main()
 	double target_position_x = 0.0;
 	double target_postion_y = 0.0;	
 	//radius of the target circle
-	double target_radius = 1.00;	
+	double target_radius = 0.25;	
 	//x/y coordinates of the center of the spread
-	double spread_postion_x = 0.8079455;
+	double spread_postion_x = 0.0;
 	double spread_postion_y = 0.0;	
-	//radius of the spread
-	double spread_radius = 1.0;
 	//distance to target
-	double distance = 10.0;
+	double distance = 30.0;
+	//radius of the spread
+	double spread_radius;
 	//magnitude of hrec, this is a random number between hrec_l and hrec_r
 	double hrec_magnitude;
 	//variables for controlling if the main loop is running
@@ -86,53 +91,54 @@ int main()
 	//main program loop
 	while (main_loop_running)
 	{
-		cout << "enter burst length: " << endl;
+		std::cout << "enter burst length: " << endl;
 		cin >> burst_lenght;
-		cout << "how many times do you want to simluate hitrate" << endl;
-		cin >> hitrate_sim_count; //this user input need to be sanitized, probably write function to do that
+		std::cout << "how many times do you want to simluate hitrate" << endl;
+		cin >> hitrate_sim_count;
 
 		//first iteration of what will be the main simulation loop
 		for (int i = 0; i < hitrate_sim_count; i++) //this loop simluates the hitrate for the # specified by user input
 		{
+			spread_radius = offset(distance, weapon_stats[10]);
+			std::cout << "spread_radius: " << spread_radius << endl;
 			for (int j = 0; j < burst_lenght; j++) //this loop simulates the hitrate for each bullet in the given burst length, then stores the value in the array (shots_in_burst)
 			{
 				if (j >= 50) //this needs to be the size of shots_in_burst, so the code doesnt break
 				{
 					break;
+
 				}
 				else
 				{	
 					hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
-					/*shots_in_burst[j] = single_bullet_sim(target_position_x, target_postion_y, target_radius,
-						spread_postion_x, spread_postion_y, spread_radius);*/
 					
-					cout << "hit_miss: \n" << single_bullet_sim(target_position_x, target_postion_y, target_radius,
+					std::cout << "hit_miss: " << single_bullet_sim(target_position_x, target_postion_y, target_radius,
 						spread_postion_x, spread_postion_y, spread_radius) << endl;
 
-					cout << "spread_postion_x: " << spread_postion_x << endl;
-					cout << "spread_radius: " << spread_radius << endl;
-					spread_postion_x = spread_postion_x + hrec(distance, hrec_magnitude);
-					spread_radius;
+					std::cout << "spread_postion_x: " << spread_postion_x << endl;
+					std::cout << "spread_radius: " << spread_radius << endl;
+					spread_postion_x = spread_postion_x + offset(distance, hrec_magnitude);
+					spread_radius = spread_radius + offset(distance, weapon_stats[6]);
 				}
 			}
-			spread_postion_x = 0.8079455;
-			spread_radius = 1.0;
+			spread_postion_x = 0.0;
+			spread_radius = 0.0;
 					//prints the results, as in the # of the shot in the burst and if it hit
 					//1 = hit, 0 = miss
-					cout << "Results: " << endl;
+					std::cout << "Results: " << endl;
 					for (int k = 0; k < burst_lenght; k++)
 					{
-						cout << "shot #";
-						cout << k + 1;
-						cout << ": ";
-						cout << shots_in_burst[k] << endl;
+						std::cout << "shot #";
+						std::cout << k + 1;
+						std::cout << ": ";
+						std::cout << shots_in_burst[k] << endl;
 					}
 		}
 		
 		// this loop just controls if the user wants to quit
 		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')
 		{
-			cout << "do you want to continue? (Y/N)" << endl;
+			std::cout << "do you want to continue? (Y/N)" << endl;
 			cin >> continue_quit_loop;
 			switch (continue_quit_loop)
 			{
@@ -153,7 +159,7 @@ int main()
 				continue_quit_loop = 'x';
 				break;
 			default:
-				cout << "Error! Debug info: continue_quit_loop, line 111, switch statement default case" << endl;
+				std::cout << "Error! Debug info: continue_quit_loop, line 111, switch statement default case" << endl;
 				break;
 			}
 		}

@@ -38,10 +38,10 @@
     <ClCompile Include="dist_betw_points.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hrec.cpp">
+    <ClCompile Include="single_bullet_sim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="single_bullet_sim.cpp">
+    <ClCompile Include="offset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

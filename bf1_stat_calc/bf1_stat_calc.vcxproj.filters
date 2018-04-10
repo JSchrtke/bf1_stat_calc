@@ -44,5 +44,8 @@
     <ClCompile Include="offset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ps2_hrec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

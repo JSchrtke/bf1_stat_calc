@@ -15,8 +15,8 @@ TO DO:
 #include <iostream>
 #include <string>
 //#define DEBUG
-//#define MANUAL_STAT_INPUT
-//#define PS2_RECOIL
+#define MANUAL_STAT_INPUT
+#define PS2_RECOIL
 using namespace std;
 
 int main()
@@ -96,7 +96,7 @@ int main()
 	//checks if the the hrec_magnitude exceeds the hrec_tolerance(for PS2)
 	double hrec_tol_check = 0;
 	//determines if the hrec goes left/right (for PS2)
-	int hrec_l_r;
+	int hrec_l_r = 0;
 	double rand_double = 0;
 
 #ifdef DEBUG
@@ -135,6 +135,8 @@ int main()
 	{
 		cout << "enter the distance: ";
 		cin >> distance;
+		cout << "enter the target size(radius in m): ";
+		cin >> target_radius;
 		cout << "enter burst length(max. 50): ";
 		cin >> burst_lenght;
 		cout << "enter simulation run count(max. 2500): ";

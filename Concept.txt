@@ -43,3 +43,6 @@ Math:
     //baselength of that triangle is distance for the spread shift
 TO DO:
 -create function for shot simulation
+
+Weapon stat array:
+  

@@ -10,13 +10,12 @@ TO DO:
 -needs to handle max spread size
 -implement hrec mechanic for PS2
 -need to add stat changes dues to hip/ads
--hrec_left (weapon_stats[5]) needs to be converted to a negative number
 */
 #include "stdafx.h"
 #include "math_functions.h"
 #include <iostream>
 #include <string>
-//#define DEBUG
+#define DEBUG
 #define MANUAL_STAT_INPUT
 using namespace std;
 
@@ -93,6 +92,10 @@ int main()
 	//counts the # of sim runs
 	int sim_counter = 0;
 
+#ifdef DEBUG
+	cout << "DEBUG MODE ON" << endl;
+#endif // DEBUG
+
 	//manual weapon stat input
 #ifdef MANUAL_STAT_INPUT
 	cout << "Please enter the weapon stats" << endl;
@@ -102,6 +105,16 @@ int main()
 		cin >> weapon_stats[i];
 	}
 #endif // MANUAL_STAT_INPUT
+
+	//converts the stat for left hrec to a negative number
+	if (weapon_stats[5] > 0)
+	{
+	weapon_stats[5] = weapon_stats[5] * -1;
+	}
+
+#ifdef DEBUG
+	cout << "DEBUG: weapon_stats[5]: " << weapon_stat_names[5] << weapon_stats[5] << endl;
+#endif // DEBUG
 
 	//main program loop
 	while (main_loop_running)

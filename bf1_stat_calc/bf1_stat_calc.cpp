@@ -8,21 +8,21 @@ TO DO:
 -shots_in_burst and results arrays need to be dynamic in lenght
 	*probably use vectors for this
 -needs to handle max spread size
--implement hrec mechanic for PS2
 -need to add stat changes dues to hip/ads
 */
 #include "stdafx.h"
 #include "math_functions.h"
 #include <iostream>
 #include <string>
-#define DEBUG
-#define MANUAL_STAT_INPUT
+//#define DEBUG
+//#define MANUAL_STAT_INPUT
+//#define PS2_RECOIL
 using namespace std;
 
 int main()
 {
 	//weapon stat array
-	double weapon_stats[18];
+	double weapon_stats[19];
 	weapon_stats[0] = 299; //Firerate
 	weapon_stats[1] = 700; //Muzzle Velocity
 	weapon_stats[2] = 10; //mag size
@@ -41,14 +41,15 @@ int main()
 	weapon_stats[15] = 1.5; //spread hip standing moving
 	weapon_stats[16] = 1.2; //spread hip crouch moving
 	weapon_stats[17] = 0.9; //spread hip prone moving
+	weapon_stats[18];
 	//weapon stat name array
-	string weapon_stat_names[18];
+	string weapon_stat_names[19];
 	weapon_stat_names[0] = "Firerate: ";
 	weapon_stat_names[1] = "Muzzle velocity: ";
 	weapon_stat_names[2] = "mag size: ";
 	weapon_stat_names[3] = "deploy time: ";
-	weapon_stat_names[4] = "hrec right: ";
-	weapon_stat_names[5] = "hrec left: ";
+	weapon_stat_names[4] = "hrec right(max): ";
+	weapon_stat_names[5] = "hrec left(min): ";
 	weapon_stat_names[6] = "sips: ";
 	weapon_stat_names[7] = "fssm ads: ";
 	weapon_stat_names[8] = "fssm hip: ";
@@ -61,6 +62,7 @@ int main()
 	weapon_stat_names[15] = "spread hip standing moving: ";
 	weapon_stat_names[16] = "spread hip crouch moving: ";
 	weapon_stat_names[17] = "spread hip prone moving: ";
+	weapon_stat_names[18] = "hrec tolerance: ";
 	//x/y coordinates of the center of the target
 	double target_position_x = 0.0;
 	double target_postion_y = 0.0;	
@@ -91,30 +93,42 @@ int main()
 	double dist_circle;
 	//counts the # of sim runs
 	int sim_counter = 0;
+	//checks if the the hrec_magnitude exceeds the hrec_tolerance(for PS2)
+	double hrec_tol_check = 0;
+	//determines if the hrec goes left/right (for PS2)
+	int hrec_l_r;
+	double rand_double = 0;
 
 #ifdef DEBUG
 	cout << "DEBUG MODE ON" << endl;
-#endif // DEBUG
+#endif // !DEBUG
 
-	//manual weapon stat input
 #ifdef MANUAL_STAT_INPUT
+	//manual weapon stat input
 	cout << "Please enter the weapon stats" << endl;
 	for (int i = 0; i <= 17; i++)
 	{
 		cout << weapon_stat_names[i];
 		cin >> weapon_stats[i];
 	}
-#endif // MANUAL_STAT_INPUT
+#ifdef PS2_RECOIL
+	cout << weapon_stat_names[18];
+	cin >> weapon_stats[18];
+#endif // PS2_RECOIL
 
+#endif // !MANUAL_STAT_INPUT
+
+#ifndef PS2_RECOIL
 	//converts the stat for left hrec to a negative number
 	if (weapon_stats[5] > 0)
 	{
 	weapon_stats[5] = weapon_stats[5] * -1;
 	}
+#endif // !PS2_RECOIL
 
 #ifdef DEBUG
 	cout << "DEBUG: weapon_stats[5]: " << weapon_stat_names[5] << weapon_stats[5] << endl;
-#endif // DEBUG
+#endif // !DEBUG
 
 	//main program loop
 	while (main_loop_running)
@@ -139,7 +153,62 @@ int main()
 				}
 				else
 				{	
-					hrec_magnitude = random_number(weapon_stats[5], weapon_stats[4]);
+					hrec_magnitude = random_number_double(weapon_stats[5], weapon_stats[4]);
+#ifdef DEBUG
+					cout << "DEBUG: hrec_magnitude before hrec_tol_check: " << hrec_magnitude << endl;
+#endif // !DEBUG
+#ifdef PS2_RECOIL
+					if (hrec_tol_check <= (weapon_stats[18] * -1))
+					{
+#ifdef DEBUG
+						cout << "DEBUG: hrec_tol_check <= hrec_tol: " << hrec_tol_check << endl;
+#endif // DEBUG
+						hrec_l_r = 1;
+					}
+					else if (hrec_tol_check >= weapon_stats[18])
+					{
+#ifdef DEBUG
+						cout << "DEBUG: hrec_tol_check >= hrec_tol: " << hrec_tol_check << endl;
+#endif // DEBUG
+						hrec_l_r = -1;
+					}
+					else
+					{
+#ifdef DEBUG
+						cout << "DEBUG: hrec_tol_check fine: " << hrec_tol_check << endl;
+#endif // DEBUG
+						while (rand_double == 0)
+						{
+							rand_double = random_number_double(-1, 1);
+							if (rand_double < 0)
+							{
+#ifdef DEBUG
+								cout << "DEBUG: rand_double < 0" << endl;
+								cout << "DEBUG: hrec_l_r: " << hrec_l_r << endl;
+#endif // !DEBUG
+								hrec_l_r = -1;
+							}
+							else if (rand_double > 0)
+							{
+#ifdef DEBUG
+								cout << "DEBUG: rand_double > 0" << endl;
+								cout << "DEBUG: hrec_l_r: " << hrec_l_r << endl;
+#endif // !DEBUG
+								hrec_l_r = 1;
+							}
+							else
+							{
+#ifdef DEBUG
+								cout << "DEBUG: rand_double = 0" << endl;
+#endif // !DEBUG
+								rand_double = 0;
+							}
+						}
+					}
+					rand_double = 0;
+					hrec_magnitude = hrec_magnitude * hrec_l_r;
+					hrec_tol_check = hrec_tol_check + hrec_magnitude;
+#endif // !PS2_RECOIL
 					shots_in_burst[sim_counter][j] = single_bullet_sim(target_position_x, target_postion_y, target_radius,
 						spread_postion_x, spread_postion_y, spread_radius);
 					spread_postion_x = spread_postion_x + offset(distance, hrec_magnitude);
@@ -149,6 +218,7 @@ int main()
 			sim_counter++;
 			spread_postion_x = 0.0;
 			spread_radius = 0.0;
+			hrec_tol_check = 0.0;
 		}
 
 		/*prints results for indivdual columns of the shots_in_burst array, for debug purpose;

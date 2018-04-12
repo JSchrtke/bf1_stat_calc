@@ -3,7 +3,6 @@
 TO DO:
 -need to add stat changes dues to hip/ads
 -add stat changes due to stances
--spread_radius variable calculation before the burst loop needs to have another variable so it can use stances
 -shots_in_burst and results arrays need to be dynamic in lenght
 	*probably use vectors for this
 */
@@ -43,6 +42,7 @@ int main()
 	weapon_stats[18] = 7.0; //max spread
 	weapon_stats[19];
 	//weapon stat name array
+	//test
 	string weapon_stat_names[20];
 	weapon_stat_names[0] = "Firerate: ";
 	weapon_stat_names[1] = "Muzzle velocity: ";

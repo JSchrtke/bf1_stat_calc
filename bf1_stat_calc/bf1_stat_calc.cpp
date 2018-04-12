@@ -4,7 +4,6 @@ TO DO:
 -needs to handle fssm
 -add stat changes due to stances
 -spread_radius variable calculation before the burst loop needs to have another variable so it can use stances
--sanitize user input for hitrate_sim_count
 -shots_in_burst and results arrays need to be dynamic in lenght
 	*probably use vectors for this
 -needs to handle max spread size
@@ -14,9 +13,11 @@ TO DO:
 #include "math_functions.h"
 #include <iostream>
 #include <string>
+#include <chrono>
 //#define DEBUG
-#define MANUAL_STAT_INPUT
-#define PS2_RECOIL
+#define DEBUG_EXEC_TIME
+//#define MANUAL_STAT_INPUT
+//#define PS2_RECOIL
 using namespace std;
 
 int main()
@@ -142,6 +143,10 @@ int main()
 		cout << "enter simulation run count(max. 2500): ";
 		cin >> hitrate_sim_count;
 
+#ifdef DEBUG_EXEC_TIME
+		auto start_exec_timer = chrono::steady_clock::now();
+#endif // !DEBUG_EXEC_TIME
+
 		//first iteration of what will be the main simulation loop
 		for (int i = 0; i < hitrate_sim_count; i++) //this loop simluates the hitrate for the # specified by user input
 		{
@@ -254,6 +259,12 @@ int main()
 			results[k] = 0;
 		}
 		sim_counter = 0;	
+
+#ifdef DEBUG_EXEC_TIME
+		auto end_exec_timer = chrono::steady_clock::now();
+		auto exec_time = end_exec_timer - start_exec_timer;
+		cout << "execution time of main loops: " << chrono::duration <double, milli>(exec_time).count() << " ms" << endl;
+#endif //!DEBUG_EXEC_TIME
 
 		// this loop just controls if the user wants to quit
 		while (continue_quit_loop == 'y' || continue_quit_loop == 'Y')

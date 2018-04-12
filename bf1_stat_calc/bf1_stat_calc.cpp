@@ -1,13 +1,11 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TO DO:
--needs to handle fssm
+-need to add stat changes dues to hip/ads
 -add stat changes due to stances
 -spread_radius variable calculation before the burst loop needs to have another variable so it can use stances
 -shots_in_burst and results arrays need to be dynamic in lenght
 	*probably use vectors for this
--needs to handle max spread size
--need to add stat changes dues to hip/ads
 */
 #include "stdafx.h"
 #include "math_functions.h"
@@ -15,15 +13,15 @@ TO DO:
 #include <string>
 #include <chrono>
 //#define DEBUG
-#define DEBUG_EXEC_TIME
-//#define MANUAL_STAT_INPUT
+//#define DEBUG_EXEC_TIME
+#define MANUAL_STAT_INPUT
 //#define PS2_RECOIL
 using namespace std;
 
 int main()
 {
 	//weapon stat array
-	double weapon_stats[19];
+	double weapon_stats[20];
 	weapon_stats[0] = 299; //Firerate
 	weapon_stats[1] = 700; //Muzzle Velocity
 	weapon_stats[2] = 10; //mag size
@@ -31,7 +29,7 @@ int main()
 	weapon_stats[4] = 0.4; //hrec right
 	weapon_stats[5] = -0.4; //hrec left
 	weapon_stats[6] = 0.1; //SIPS
-	weapon_stats[7] = 1; //fssm ads
+	weapon_stats[7] = 10; //fssm ads
 	weapon_stats[8] = 1; //fssm hip
 	weapon_stats[9] = 3; //spread decrease
 	weapon_stats[10] = 0.18; //spread ads not moving
@@ -42,9 +40,10 @@ int main()
 	weapon_stats[15] = 1.5; //spread hip standing moving
 	weapon_stats[16] = 1.2; //spread hip crouch moving
 	weapon_stats[17] = 0.9; //spread hip prone moving
-	weapon_stats[18];
+	weapon_stats[18] = 7.0; //max spread
+	weapon_stats[19];
 	//weapon stat name array
-	string weapon_stat_names[19];
+	string weapon_stat_names[20];
 	weapon_stat_names[0] = "Firerate: ";
 	weapon_stat_names[1] = "Muzzle velocity: ";
 	weapon_stat_names[2] = "mag size: ";
@@ -63,7 +62,8 @@ int main()
 	weapon_stat_names[15] = "spread hip standing moving: ";
 	weapon_stat_names[16] = "spread hip crouch moving: ";
 	weapon_stat_names[17] = "spread hip prone moving: ";
-	weapon_stat_names[18] = "hrec tolerance: ";
+	weapon_stat_names[18] = "max spread: ";
+	weapon_stat_names[19] = "hrec tolerance: ";
 	//x/y coordinates of the center of the target
 	double target_position_x = 0.0;
 	double target_postion_y = 0.0;	
@@ -99,6 +99,8 @@ int main()
 	//determines if the hrec goes left/right (for PS2)
 	int hrec_l_r = 0;
 	double rand_double = 0;
+	// variable for checking if the max spread has been reached
+	double max_spread_reached;
 
 #ifdef DEBUG
 	cout << "DEBUG MODE ON" << endl;
@@ -107,17 +109,19 @@ int main()
 #ifdef MANUAL_STAT_INPUT
 	//manual weapon stat input
 	cout << "Please enter the weapon stats" << endl;
-	for (int i = 0; i <= 17; i++)
+	for (int i = 0; i <= 18; i++)
 	{
 		cout << weapon_stat_names[i];
 		cin >> weapon_stats[i];
 	}
 #ifdef PS2_RECOIL
-	cout << weapon_stat_names[18];
-	cin >> weapon_stats[18];
+	cout << weapon_stat_names[19];
+	cin >> weapon_stats[19];
 #endif // PS2_RECOIL
 
 #endif // !MANUAL_STAT_INPUT
+
+	max_spread_reached = offset(distance, weapon_stats[18]);
 
 #ifndef PS2_RECOIL
 	//converts the stat for left hrec to a negative number
@@ -145,6 +149,7 @@ int main()
 
 #ifdef DEBUG_EXEC_TIME
 		auto start_exec_timer = chrono::steady_clock::now();
+		cout << "DEBUG: started execution timer" << endl;
 #endif // !DEBUG_EXEC_TIME
 
 		//first iteration of what will be the main simulation loop
@@ -156,58 +161,34 @@ int main()
 				if (j >= 50) //this needs to be the size of shots_in_burst, so the code doesnt break
 				{
 					break;
-
 				}
 				else
 				{	
 					hrec_magnitude = random_number_double(weapon_stats[5], weapon_stats[4]);
-#ifdef DEBUG
-					cout << "DEBUG: hrec_magnitude before hrec_tol_check: " << hrec_magnitude << endl;
-#endif // !DEBUG
 #ifdef PS2_RECOIL
 					if (hrec_tol_check <= (weapon_stats[18] * -1))
 					{
-#ifdef DEBUG
-						cout << "DEBUG: hrec_tol_check <= hrec_tol: " << hrec_tol_check << endl;
-#endif // DEBUG
 						hrec_l_r = 1;
 					}
 					else if (hrec_tol_check >= weapon_stats[18])
 					{
-#ifdef DEBUG
-						cout << "DEBUG: hrec_tol_check >= hrec_tol: " << hrec_tol_check << endl;
-#endif // DEBUG
 						hrec_l_r = -1;
 					}
 					else
 					{
-#ifdef DEBUG
-						cout << "DEBUG: hrec_tol_check fine: " << hrec_tol_check << endl;
-#endif // DEBUG
 						while (rand_double == 0)
 						{
 							rand_double = random_number_double(-1, 1);
 							if (rand_double < 0)
 							{
-#ifdef DEBUG
-								cout << "DEBUG: rand_double < 0" << endl;
-								cout << "DEBUG: hrec_l_r: " << hrec_l_r << endl;
-#endif // !DEBUG
 								hrec_l_r = -1;
 							}
 							else if (rand_double > 0)
 							{
-#ifdef DEBUG
-								cout << "DEBUG: rand_double > 0" << endl;
-								cout << "DEBUG: hrec_l_r: " << hrec_l_r << endl;
-#endif // !DEBUG
 								hrec_l_r = 1;
 							}
 							else
 							{
-#ifdef DEBUG
-								cout << "DEBUG: rand_double = 0" << endl;
-#endif // !DEBUG
 								rand_double = 0;
 							}
 						}
@@ -218,8 +199,21 @@ int main()
 #endif // !PS2_RECOIL
 					shots_in_burst[sim_counter][j] = single_bullet_sim(target_position_x, target_postion_y, target_radius,
 						spread_postion_x, spread_postion_y, spread_radius);
-					spread_postion_x = spread_postion_x + offset(distance, hrec_magnitude);
-					spread_radius = spread_radius + offset(distance, weapon_stats[6]);
+
+					spread_postion_x = spread_postion_x + offset(distance, hrec_magnitude); // offsets spread_position_x due to horizontal recoil
+					
+					if (j == 0)
+					{
+						spread_radius = spread_radius + offset(distance, weapon_stats[6] * weapon_stats[7]); // increases spread_radius using fssm
+					}
+					else if (spread_radius >= max_spread_reached)
+					{
+						spread_radius = spread_radius;
+					}
+					else
+					{
+						spread_radius = spread_radius + offset(distance, weapon_stats[6]); // increases spread_radius due to spread increase per shot
+					}
 				}
 			}
 			sim_counter++;
@@ -228,8 +222,7 @@ int main()
 			hrec_tol_check = 0.0;
 		}
 
-		/*prints results for indivdual columns of the shots_in_burst array, for debug purpose;
-		adds up all the results from the sim runs and stores them in the results array*/
+		/*adds up all the results from the sim runs and stores them in the results array*/
 		for (int l = 0; l < sim_counter; l++)
 		{
 			for (int k = 0; k < burst_lenght; k++)

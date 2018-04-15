@@ -61,7 +61,6 @@ double single_bullet_sim(double target_position_x, double target_position_y,doub
 #ifdef DEBUG
 		}
 #endif // DEBUG
-
 	}
 	return hit_miss;
 }

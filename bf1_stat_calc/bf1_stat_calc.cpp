@@ -10,10 +10,11 @@ TODO shots_in_burst and results arrays need to be dynamic in length
 #include <iostream>
 #include <string>
 #include <chrono>
-#define DEBUG
-#define DEBUG_EXEC_TIME
-#define MANUAL_STAT_INPUT
-#define PS2_RECOIL
+#include <vector>
+//#define DEBUG
+//#define DEBUG_EXEC_TIME
+//#define MANUAL_STAT_INPUT
+//#define PS2_RECOIL
 using namespace std;
 
 int main() {
@@ -86,9 +87,8 @@ int main() {
     /*array for storing the results of individual bullets that hit/miss in a burst;
      * first index = sim runs, second = shots in the burst*/
     double shots_in_burst[2500][50];
-    //array that stores the results
-    double results[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    //vector that stores the results
+    vector<double> results;
     //stores burst length
     int burst_length = 5;
     //counts the # of sim runs
@@ -223,8 +223,8 @@ int main() {
             hrec_tol_check = 0.0;
 #endif // !PS2_RECOIL
         }
-
         /*adds up all the results from the sim runs and stores them in the results array*/
+        results.resize(static_cast<unsigned long long int>(burst_length));
         for ( int l = 0; l < sim_counter; l++ ) {
             for ( int k = 0; k < burst_length; k++ ) {
                 results[k] = results[k] + shots_in_burst[l][k];
@@ -262,7 +262,7 @@ int main() {
             cin >> continue_quit_loop;
             switch ( continue_quit_loop ) {
                 case 'y':
-                    main_loop_running = true;
+                main_loop_running = true;
                     continue_quit_loop = 'x';
                     break;
                 case 'Y':

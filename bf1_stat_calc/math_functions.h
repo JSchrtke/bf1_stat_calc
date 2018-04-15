@@ -11,10 +11,10 @@ double random_number_double(double rand_num_min, double rand_num_max);
 
 //function to simulate if single bullet hit/miss
 double single_bullet_sim(double target_position_x, double target_position_y, double target_radius,
-	double spread_position_x, double spread_position_y, double spread_radius);
+						 double spread_position_x, double spread_position_y, double spread_radius);
 
 //function to be able to handle PS2's hrec mechanics
 double ps2_hrec(double hrec_magnitude, double hrec_tol_check, double weapon_stats_18,
-	double rand_double, int hrec_l_r);
+				double rand_double, int hrec_l_r);
 
 #endif //math_functions_h_

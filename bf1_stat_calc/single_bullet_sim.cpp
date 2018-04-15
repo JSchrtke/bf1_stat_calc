@@ -10,10 +10,7 @@ const double PI = 3.141592653589793238463;
 double single_bullet_sim(double target_position_x, double target_position_y,double target_radius,
 	double spread_position_x, double spread_position_y, double spread_radius)
 {
-	double result;
 	double dist_circles = dist_betw_points(target_position_x, target_position_y, spread_position_x, spread_position_y);
-	double d_1;
-	double d_2;
 	double t_r_sq = target_radius * target_radius;
 	double s_r_sq = spread_radius * spread_radius;
 	double d_c_sq = dist_circles * dist_circles;

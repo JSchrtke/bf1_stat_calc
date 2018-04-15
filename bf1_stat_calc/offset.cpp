@@ -4,6 +4,7 @@ This function calculates a distance offset based on an angle(such as hrec or spr
 */
 #include "stdafx.h"
 #include "math_functions.h"
+#include <cmath>
 #include <iostream>
 
 const double PI = 3.141592653589793238463;

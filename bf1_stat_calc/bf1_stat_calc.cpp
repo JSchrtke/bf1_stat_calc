@@ -13,7 +13,7 @@ TODO shots_in_burst and results arrays need to be dynamic in length
 #include <vector>
 //#define DEBUG
 //#define DEBUG_EXEC_TIME
-//#define MANUAL_STAT_INPUT
+#define MANUAL_STAT_INPUT
 //#define PS2_RECOIL
 using namespace std;
 
@@ -30,7 +30,7 @@ int main() {
     weapon_stats[7] = 10; //fssm ads
     weapon_stats[8] = 1; //fssm hip
     weapon_stats[9] = 3; //spread decrease
-    weapon_stats[10] = 0.18; //spread ads not moving
+    weapon_stats[10] = 0.0; //spread ads not moving
     weapon_stats[11] = 0.82; //spread ads moving
     weapon_stats[12] = 1; //spread hip standing not moving
     weapon_stats[13] = 0.75; //spread hip crouch not moving
@@ -101,7 +101,7 @@ int main() {
     int hrec_l_r = 0;
     double rand_double = 0;
     // variable for checking if the max spread has been reached
-    double max_spread_reached;
+    double current_spread_angle = weapon_stats[10];
 
 #ifdef DEBUG
     cout << "DEBUG MODE ON" << endl;
@@ -121,7 +121,6 @@ int main() {
 
 #endif // !MANUAL_STAT_INPUT
 
-    max_spread_reached = offset(distance, weapon_stats[18]);
 
 #ifndef PS2_RECOIL
     //converts the stat for left hrec to a negative number
@@ -158,8 +157,8 @@ int main() {
             for ( int j = 0; j < burst_length; j++ ) //this loop simulates the hitrate for each bullet in the given
                                                     // burst length, then stores the value in the array (shots_in_burst)
             {
-                if ( j >= 50 ) //this needs to be the size of shots_in_burst, so the code doesnt break
-                {
+                if ( j >= 50 ) { //this needs to be the size of shots_in_burst, so the code doesnt break
+
                     break;
                 } else {
                     hrec_magnitude = random_number_double(weapon_stats[5], weapon_stats[4]);
@@ -206,19 +205,22 @@ int main() {
 
                     if ( j == 0 ) {
                         spread_radius = spread_radius + offset(distance, weapon_stats[6] *
-                                                                         weapon_stats[7]); // increases spread_radius
-                        // using fssm
-                    } else if ( spread_radius >= max_spread_reached ) {
+                                                                         weapon_stats[7]);  // increases spread_radius
+                                                                                            // using fssm
+                        current_spread_angle = current_spread_angle + weapon_stats[6] * weapon_stats[7];
+                    } else if ( current_spread_angle >= weapon_stats[18] || current_spread_angle <= weapon_stats[10]) {
                         spread_radius = spread_radius;
                     } else {
                         spread_radius = spread_radius + offset(distance,
                                                                weapon_stats[6]); /*increases spread_radius due to
- * spread increase per shot*/
+                                                                                    * spread increase per shot*/
+                        current_spread_angle = current_spread_angle + weapon_stats[6];
                     }
                 }
             }
             sim_counter++;
             spread_position_x = 0.0;
+            current_spread_angle = weapon_stats[10];
 #ifdef PS2_RECOIL
             hrec_tol_check = 0.0;
 #endif // !PS2_RECOIL

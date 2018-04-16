@@ -13,7 +13,7 @@ TODO shots_in_burst and results arrays need to be dynamic in length
 #include <vector>
 //#define DEBUG
 //#define DEBUG_EXEC_TIME
-#define MANUAL_STAT_INPUT
+//#define MANUAL_STAT_INPUT
 //#define PS2_RECOIL
 using namespace std;
 
@@ -86,7 +86,7 @@ int main() {
     int hitrate_sim_count = 1;
     /*array for storing the results of individual bullets that hit/miss in a burst;
      * first index = sim runs, second = shots in the burst*/
-    double shots_in_burst[2500][50];
+    vector<vector<double>> shots_in_burst;
     //vector that stores the results
     vector<double> results;
     //stores burst length
@@ -139,16 +139,16 @@ int main() {
         cin >> distance;
         cout << "enter the target size(radius in m): ";
         cin >> target_radius;
-        cout << "enter burst length(max. 50): ";
+        cout << "enter burst length: ";
         cin >> burst_length;
-        cout << "enter simulation run count(max. 2500): ";
+        cout << "enter simulation run count: ";
         cin >> hitrate_sim_count;
 
 #ifdef DEBUG_EXEC_TIME
         auto start_exec_timer = chrono::steady_clock::now();
         cout << "DEBUG: started execution timer" << endl;
 #endif // !DEBUG_EXEC_TIME
-
+        shots_in_burst.resize(hitrate_sim_count, vector<double>(burst_length));
         //first iteration of what will be the main simulation loop
         for ( int i = 0;
               i < hitrate_sim_count; i++ ) //this loop simulates the hitrate for the # specified by user input

@@ -7,6 +7,7 @@ TODO add stat changes due to stances
 */
 #include "stdafx.h"
 #include "bf1.h"
+#include "ps2.h"
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -74,7 +75,7 @@ int main() {
     //distance to target
     double distance = 30.0;
     //radius of the spread
-    double spread_radius;
+    double spread_radius = 0;
     //magnitude of hrec, this is a random number between hrec_l and hrec_r
     double hrec_magnitude;
     //variables for controlling if the main loop is running
@@ -83,91 +84,142 @@ int main() {
     char continue_quit_loop = 'y';
     //variable to specify how many times the simulation runs
     int hitrate_sim_count = 1;
-    //stores the results of every sim run
-    vector<double> shots_in_burst;
     //stores burst length
     unsigned long long int burst_length = 5;
-    //counts the # of sim runs
-    int sim_counter = 0;
-    //checks if the the hrec_magnitude exceeds the hrec_tolerance(for PS2)
-#ifdef PS2_RECOIL
-    double hrec_tol_check = 0;
-#endif // !PS2_RECOIL
-    //determines if the hrec goes left/right (for PS2)
-    int hrec_l_r = 0;
-    double rand_double = 0;
-    // variable for checking if the max spread has been reached
-    double current_spread_angle = weapon_stats[10];
+    //variable to choose the game
+    int game_choice = 0;
 
 #ifdef DEBUG
     cout << "DEBUG MODE ON" << endl;
 #endif // !DEBUG
 
-#ifdef MANUAL_STAT_INPUT
-    //manual weapon stat input
-    cout << "Please enter the weapon stats" << endl;
-    for ( int i = 0; i <= 18; i++ ) {
-        cout << weapon_stat_names[i];
-        cin >> weapon_stats[i];
-    }
-#ifdef PS2_RECOIL
-    cout << weapon_stat_names[19];
-    cin >> weapon_stats[19];
-#endif // PS2_RECOIL
+    //game choice
+    cout << "choose the game:\n";
+    cout << "0: BF1\n";
+    cout << "1: PS2" << endl;
+    cin >> game_choice;
 
-#endif // !MANUAL_STAT_INPUT
+    if (game_choice == 0) {
 
-
-#ifndef PS2_RECOIL
-    //converts the stat for left hrec to a negative number
-    if ( weapon_stats[5] > 0 ) {
-        weapon_stats[5] = weapon_stats[5] * -1;
-    }
-#endif // !PS2_RECOIL
-
-    //main program loop
-    while ( main_loop_running ) {
-        cout << "enter the distance: ";
-        cin >> distance;
-        cout << "enter the target size(radius in m): ";
-        cin >> target_radius;
-        cout << "enter burst length: ";
-        cin >> burst_length;
-        cout << "enter simulation run count: ";
-        cin >> hitrate_sim_count;
-
+        cout << "you chose BF1" << endl;
         bf1 bf1_sim;
-        bf1_sim.simulation(target_position_x, target_position_y, target_radius,
-                           spread_position_x, spread_position_y, spread_radius,
-                           hitrate_sim_count, burst_length, weapon_stats, distance);
 
-        // this loop just controls if the user wants to quit
-        while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {
-            cout << "do you want to continue? (Y/N)" << endl;
-            cin >> continue_quit_loop;
-            switch ( continue_quit_loop ) {
-                case 'y':
-                    main_loop_running = true;
-                    continue_quit_loop = 'x';
-                    break;
-                case 'Y':
-                    main_loop_running = true;
-                    continue_quit_loop = 'x';
-                    break;
-                case 'n':
-                    main_loop_running = false;
-                    continue_quit_loop = 'x';
-                    break;
-                case 'N':
-                    main_loop_running = false;
-                    continue_quit_loop = 'x';
-                    break;
-                default:
-                    cout << "Error!" << endl;
-                    break;
-            }
+        //manual weapon stat input
+        cout << "Please enter the weapon stats" << endl;
+        for ( int i = 0; i <= 18; i++ ) {
+            cout << weapon_stat_names[i];
+            cin >> weapon_stats[i];
         }
-        continue_quit_loop = 'y';
+
+        //converts the stat for left hrec to a negative number
+        if ( weapon_stats[5] > 0 ) {
+            weapon_stats[5] = weapon_stats[5] * -1;
+        }
+
+        //main program loop
+        while ( main_loop_running ) {
+            cout << "enter the distance: ";
+            cin >> distance;
+            cout << "enter the target size(radius in m): ";
+            cin >> target_radius;
+            cout << "enter burst length: ";
+            cin >> burst_length;
+            cout << "enter simulation run count: ";
+            cin >> hitrate_sim_count;
+
+            bf1_sim.simulation(target_position_x, target_position_y, target_radius,
+                               spread_position_x, spread_position_y, spread_radius,
+                               hitrate_sim_count, burst_length, weapon_stats, distance);
+
+            // this loop just controls if the user wants to quit
+            while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {
+                cout << "do you want to continue? (Y/N)" << endl;
+                cin >> continue_quit_loop;
+                switch ( continue_quit_loop ) {
+                    case 'y':
+                        main_loop_running = true;
+                        continue_quit_loop = 'x';
+                        break;
+                    case 'Y':
+                        main_loop_running = true;
+                        continue_quit_loop = 'x';
+                        break;
+                    case 'n':
+                        main_loop_running = false;
+                        continue_quit_loop = 'x';
+                        break;
+                    case 'N':
+                        main_loop_running = false;
+                        continue_quit_loop = 'x';
+                        break;
+                    default:
+                        cout << "Error!" << endl;
+                        break;
+                }
+            }
+            continue_quit_loop = 'y';
+        }
+        return 0;
     }
-    return 0;
+    else if (game_choice == 1) {
+        cout << "you chose PS2" << endl;
+        ps2 ps2_sim;
+
+        //manual weapon stat input
+        cout << "Please enter the weapon stats" << endl;
+        for ( int i = 0; i <= 19; i++ ) {
+            cout << weapon_stat_names[i];
+            cin >> weapon_stats[i];
+        }
+
+        //main program loop
+        while ( main_loop_running ) {
+            cout << "enter the distance: ";
+            cin >> distance;
+            cout << "enter the target size(radius in m): ";
+            cin >> target_radius;
+            cout << "enter burst length: ";
+            cin >> burst_length;
+            cout << "enter simulation run count: ";
+            cin >> hitrate_sim_count;
+
+            ps2_sim.simulation(target_position_x, target_position_y, target_radius,
+                               spread_position_x, spread_position_y, spread_radius,
+                               hitrate_sim_count, burst_length, weapon_stats, distance);
+
+            // this loop just controls if the user wants to quit
+            while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {
+                cout << "do you want to continue? (Y/N)" << endl;
+                cin >> continue_quit_loop;
+                switch ( continue_quit_loop ) {
+                    case 'y':
+                        main_loop_running = true;
+                        continue_quit_loop = 'x';
+                        break;
+                    case 'Y':
+                        main_loop_running = true;
+                        continue_quit_loop = 'x';
+                        break;
+                    case 'n':
+                        main_loop_running = false;
+                        continue_quit_loop = 'x';
+                        break;
+                    case 'N':
+                        main_loop_running = false;
+                        continue_quit_loop = 'x';
+                        break;
+                    default:
+                        cout << "Error!" << endl;
+                        break;
+                }
+            }
+            continue_quit_loop = 'y';
+        }
+        return 0;
+    }
+    else {
+        cout << "Error! you must choose a game!";
+    }
+
+
 }

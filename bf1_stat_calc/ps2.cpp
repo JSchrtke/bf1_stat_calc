@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include "ps2.h"
 
 void ps2::simulation(double target_position_x, double target_position_y, double target_radius,
@@ -98,4 +99,12 @@ void ps2::simulation(double target_position_x, double target_position_y, double 
         shots_in_burst[k] = 0;
     }
     sim_counter = 0;
+}
+
+void ps2::stat_input(double *weapon_stats, std::string *weapon_stat_names) {
+    std::cout << "Please enter the weapon stats" << std::endl;
+    for ( int i = 0; i <= 19; i++ ) {
+        std::cout << weapon_stat_names[i];
+        std::cin >> weapon_stats[i];
+    }
 }

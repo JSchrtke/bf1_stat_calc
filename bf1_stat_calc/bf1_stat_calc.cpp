@@ -1,7 +1,6 @@
 ﻿// bf1_stat_calc.cpp
 /*
 TODO Make weapon stats into a class
-TODO make a separate function to continue/quit the program
 TODO Make manual stat input a separate function, probably tied to the individual game class
 TODO Integrate conversion to negative number for hrec_left into the BF1 class
 TODO FIGURE OUT A WAY TO HANDLE STANCES
@@ -12,12 +11,8 @@ TODO FIGURE OUT A WAY TO HANDLE STANCES
 #include "continue_quit_function.h"
 #include <iostream>
 #include <string>
-#include <chrono>
 #include <vector>
-//#define DEBUG
-//#define DEBUG_EXEC_TIME
-#define MANUAL_STAT_INPUT
-//#define PS2_RECOIL
+
 using namespace std;
 
 int main() {
@@ -91,10 +86,6 @@ int main() {
     //variable to choose the game
     int game_choice = 0;
 
-#ifdef DEBUG
-    cout << "DEBUG MODE ON" << endl;
-#endif // !DEBUG
-
     //game choice
     cout << "choose the game:\n";
     cout << "0: BF1\n";
@@ -107,11 +98,7 @@ int main() {
         bf1 bf1_sim;
 
         //manual weapon stat input
-        cout << "Please enter the weapon stats" << endl;
-        for ( int i = 0; i <= 18; i++ ) {
-            cout << weapon_stat_names[i];
-            cin >> weapon_stats[i];
-        }
+        bf1_sim.stat_input(weapon_stats, weapon_stat_names);
 
         //converts the stat for left hrec to a negative number
         if ( weapon_stats[5] > 0 ) {
@@ -142,11 +129,7 @@ int main() {
         ps2 ps2_sim;
 
         //manual weapon stat input
-        cout << "Please enter the weapon stats" << endl;
-        for ( int i = 0; i <= 19; i++ ) {
-            cout << weapon_stat_names[i];
-            cin >> weapon_stats[i];
-        }
+        ps2_sim.stat_input(weapon_stats, weapon_stat_names);
 
         //main program loop
         while ( main_loop_running ) {

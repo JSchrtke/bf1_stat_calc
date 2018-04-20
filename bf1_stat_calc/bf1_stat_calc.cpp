@@ -1,17 +1,19 @@
 ﻿// bf1_stat_calc.cpp
 /*
+TODO Make weapon stats a struct/class or smthng
+TODO Add ability to read in weapon stats from file/database
 TODO need to add stat changes dues to hip/ads
 TODO add stat changes due to stances
 */
 #include "stdafx.h"
-#include "math_functions.h"
+#include "bf1.h"
 #include <iostream>
 #include <string>
 #include <chrono>
 #include <vector>
 //#define DEBUG
 //#define DEBUG_EXEC_TIME
-//#define MANUAL_STAT_INPUT
+#define MANUAL_STAT_INPUT
 //#define PS2_RECOIL
 using namespace std;
 
@@ -37,9 +39,8 @@ int main() {
     weapon_stats[16] = 1.2; //spread hip crouch moving
     weapon_stats[17] = 0.9; //spread hip prone moving
     weapon_stats[18] = 1.2; //max spread
-#ifdef PS2_RECOIL
     weapon_stats[19] = 0;
-#endif
+
     //weapon stat name array
     string weapon_stat_names[20];
     weapon_stat_names[0] = "Firerate: ";
@@ -81,7 +82,7 @@ int main() {
     //variable for the loop that allows to continue or quit the program
     char continue_quit_loop = 'y';
     //variable to specify how many times the simulation runs
-    unsigned long long int hitrate_sim_count = 1;
+    int hitrate_sim_count = 1;
     //stores the results of every sim run
     vector<double> shots_in_burst;
     //stores burst length
@@ -134,94 +135,11 @@ int main() {
         cin >> burst_length;
         cout << "enter simulation run count: ";
         cin >> hitrate_sim_count;
-        shots_in_burst.resize(burst_length);
-        //main simulation loop
-        for ( int i = 0;
-              i < hitrate_sim_count; i++ ) //this loop simulates the hitrate for the # specified by user input
-        {
-            spread_radius = offset(distance, weapon_stats[10]);
-            for ( int j = 0; j < burst_length; j++ ) //this loop simulates the hitrate for each bullet in the given
-                // burst length, then stores the value in the array (shots_in_burst)
-            {
-                hrec_magnitude = random_number_double(weapon_stats[5], weapon_stats[4]);
-#ifdef PS2_RECOIL
-                if (hrec_tol_check <= (weapon_stats[19] * -1))
-                {
-                    hrec_l_r = 1;
-                }
-                else if (hrec_tol_check >= weapon_stats[19])
-                {
-                    hrec_l_r = -1;
-                }
-                else
-                {
-                    while (rand_double == 0)
-                    {
-                        rand_double = random_number_double(-1, 1);
-                        if (rand_double < 0)
-                        {
-                            hrec_l_r = -1;
-                        }
-                        else if (rand_double > 0)
-                        {
-                            hrec_l_r = 1;
-                        }
-                        else
-                        {
-                            rand_double = 0;
-                        }
-                    }
-                }
-                rand_double = 0;
-                hrec_magnitude = hrec_magnitude * hrec_l_r;
-                hrec_tol_check = hrec_tol_check + hrec_magnitude;
-#endif // !PS2_RECOIL
-                shots_in_burst[j] = shots_in_burst[j] + single_bullet_sim(target_position_x, target_position_y,
-                                                                          target_radius,
-                                                                          spread_position_x, spread_position_y,
-                                                                          spread_radius);
 
-                spread_position_x = spread_position_x + offset(distance,
-                                                               hrec_magnitude); // offsets spread_position_x due
-                // to horizontal recoil
-
-                if ( j == 0 ) {
-                    spread_radius = spread_radius + offset(distance, weapon_stats[6] *
-                                                                     weapon_stats[7]);  // increases spread_radius
-                    // using fssm
-                    current_spread_angle = current_spread_angle + weapon_stats[6] * weapon_stats[7];
-                } else if ( current_spread_angle >= weapon_stats[18] || current_spread_angle <= weapon_stats[10] ) {
-                    spread_radius = spread_radius;
-                } else {
-                    spread_radius = spread_radius + offset(distance,
-                                                           weapon_stats[6]); /*increases spread_radius due to
-                                                                                * spread increase per shot*/
-                    current_spread_angle = current_spread_angle + weapon_stats[6];
-                }
-            }
-            sim_counter++;
-            spread_position_x = 0.0;
-            current_spread_angle = weapon_stats[10];
-#ifdef PS2_RECOIL
-            hrec_tol_check = 0.0;
-#endif // !PS2_RECOIL
-        }
-        //prints the final results
-        cout << "final results" << endl;
-        for ( int k = 0; k < burst_length; k++ ) {
-            shots_in_burst[k] = shots_in_burst[k] / sim_counter;
-            cout << "shot #";
-            cout << k + 1;
-            cout << ": ";
-            cout << shots_in_burst[k] * 100;
-            cout << " %" << endl;
-        }
-
-        //resets the shots_in_burst array after printing the results
-        for ( int k = 0; k < burst_length; k++ ) {
-            shots_in_burst[k] = 0;
-        }
-        sim_counter = 0;
+        bf1 bf1_sim;
+        bf1_sim.simulation(target_position_x, target_position_y, target_radius,
+                           spread_position_x, spread_position_y, spread_radius,
+                           hitrate_sim_count, burst_length, weapon_stats, distance);
 
         // this loop just controls if the user wants to quit
         while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {

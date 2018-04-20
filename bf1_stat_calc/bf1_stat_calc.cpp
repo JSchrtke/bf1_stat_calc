@@ -1,13 +1,15 @@
 ﻿// bf1_stat_calc.cpp
 /*
-TODO Make weapon stats a struct/class or smthng
-TODO Add ability to read in weapon stats from file/database
-TODO need to add stat changes dues to hip/ads
-TODO add stat changes due to stances
+TODO Make weapon stats into a class
+TODO make a separate function to continue/quit the program
+TODO Make manual stat input a separate function, probably tied to the individual game class
+TODO Integrate conversion to negative number for hrec_left into the BF1 class
+TODO FIGURE OUT A WAY TO HANDLE STANCES
 */
 #include "stdafx.h"
 #include "bf1.h"
 #include "ps2.h"
+#include "continue_quit_function.h"
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -131,33 +133,7 @@ int main() {
                                spread_position_x, spread_position_y, spread_radius,
                                hitrate_sim_count, burst_length, weapon_stats, distance);
 
-            // this loop just controls if the user wants to quit
-            while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {
-                cout << "do you want to continue? (Y/N)" << endl;
-                cin >> continue_quit_loop;
-                switch ( continue_quit_loop ) {
-                    case 'y':
-                        main_loop_running = true;
-                        continue_quit_loop = 'x';
-                        break;
-                    case 'Y':
-                        main_loop_running = true;
-                        continue_quit_loop = 'x';
-                        break;
-                    case 'n':
-                        main_loop_running = false;
-                        continue_quit_loop = 'x';
-                        break;
-                    case 'N':
-                        main_loop_running = false;
-                        continue_quit_loop = 'x';
-                        break;
-                    default:
-                        cout << "Error!" << endl;
-                        break;
-                }
-            }
-            continue_quit_loop = 'y';
+            main_loop_running = cont_quit();
         }
         return 0;
     }
@@ -186,40 +162,11 @@ int main() {
             ps2_sim.simulation(target_position_x, target_position_y, target_radius,
                                spread_position_x, spread_position_y, spread_radius,
                                hitrate_sim_count, burst_length, weapon_stats, distance);
-
-            // this loop just controls if the user wants to quit
-            while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {
-                cout << "do you want to continue? (Y/N)" << endl;
-                cin >> continue_quit_loop;
-                switch ( continue_quit_loop ) {
-                    case 'y':
-                        main_loop_running = true;
-                        continue_quit_loop = 'x';
-                        break;
-                    case 'Y':
-                        main_loop_running = true;
-                        continue_quit_loop = 'x';
-                        break;
-                    case 'n':
-                        main_loop_running = false;
-                        continue_quit_loop = 'x';
-                        break;
-                    case 'N':
-                        main_loop_running = false;
-                        continue_quit_loop = 'x';
-                        break;
-                    default:
-                        cout << "Error!" << endl;
-                        break;
-                }
-            }
-            continue_quit_loop = 'y';
+            main_loop_running = cont_quit();
         }
         return 0;
     }
     else {
         cout << "Error! you must choose a game!";
     }
-
-
 }

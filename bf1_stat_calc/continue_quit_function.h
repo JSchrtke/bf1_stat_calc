@@ -1,0 +1,9 @@
+//
+// Created by Joharnis on 20/04/2018.
+//
+
+#ifndef BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H
+#define BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H
+
+bool cont_quit();
+#endif //BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H

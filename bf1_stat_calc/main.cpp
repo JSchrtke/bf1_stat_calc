@@ -13,12 +13,14 @@ TODO implement stance handling for PS2
 using namespace std;
 
 int main() {
-    //variables for controlling if the main loop is running
+    // variable for controlling if the main loop is running, this needs to evaluate to "true" for the program to run
     bool main_loop_running = true;
-    //variable to choose the game
+    //variable for choosing the game; 0 = BF1, 1 = PS2
     int game_choice = 0;
 
-    //game choice
+    /* sets the game_choice variable to the games corresponding value, so that the right functions can be called in the
+     * following conditional statement
+     */
     cout << "choose the game:\n";
     cout << "0: BF1\n";
     cout << "1: PS2" << endl;
@@ -29,12 +31,11 @@ int main() {
         cout << "you chose BF1" << endl;
         bf1 bf1_sim;
 
-        //manual weapon stat input
         bf1_sim.stat_input();
 
         bf1_sim.changeStance();
 
-        //main program loop
+        // main program loop; while this is "true" the program will run
         while ( main_loop_running ) {
             bf1_sim.GetSimulationVariables();
 
@@ -48,10 +49,8 @@ int main() {
         cout << "you chose PS2" << endl;
         ps2 ps2_sim;
 
-        //manual weapon stat input
         ps2_sim.stat_input();
 
-        //main program loop
         while ( main_loop_running ) {
             ps2_sim.GetSimulationVariables();
 

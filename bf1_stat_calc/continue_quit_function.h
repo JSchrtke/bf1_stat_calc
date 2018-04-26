@@ -6,4 +6,5 @@
 #define BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H
 
 bool cont_quit();
+
 #endif //BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H

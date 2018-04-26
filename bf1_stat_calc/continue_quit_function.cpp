@@ -3,7 +3,7 @@
 
 bool cont_quit() {
     char continue_quit_loop = 'y';
-    bool main_loop_running;
+    bool main_loop_running = true;
     // this loop just controls if the user wants to quit
     while ( continue_quit_loop == 'y' || continue_quit_loop == 'Y' ) {
         std::cout << "do you want to continue? (Y/N)" << std::endl;

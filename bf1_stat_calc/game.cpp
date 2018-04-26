@@ -27,8 +27,7 @@ double game::random_number_double(double rand_num_min, double rand_num_max) {
     return rand_double;
 }
 
-double game::single_bullet_sim(double target_position_x, double target_position_y, double target_radius,
-                               double spread_position_x, double spread_position_y, double spread_radius) {
+double game::single_bullet_sim() {
     double dist_circles = dist_betw_points(target_position_x, target_position_y, spread_position_x, spread_position_y);
     double t_r_sq = target_radius * target_radius;
     double s_r_sq = spread_radius * spread_radius;
@@ -58,4 +57,31 @@ double game::single_bullet_sim(double target_position_x, double target_position_
         hit_miss = intersect_area / (PI * s_r_sq);
     }
     return hit_miss;
+}
+
+void game::GetTargetRadius() {
+    std::cout << "enter the target size(radius in m): ";
+    std::cin >> target_radius;
+}
+
+void game::GetDistance() {
+    std::cout << "enter the distance: ";
+    std::cin >> distance;
+}
+
+void game::GetBurstLength() {
+    std::cout << "enter burst length: ";
+    std::cin >> burst_length;
+}
+
+void game::GetHitrateSimCount() {
+    std::cout << "Enter simulation run count: ";
+    std::cin >> hitrate_sim_count;
+}
+
+void game::GetSimulationVariables() {
+    GetDistance();
+    GetTargetRadius();
+    GetBurstLength();
+    GetHitrateSimCount();
 }

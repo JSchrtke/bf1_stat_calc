@@ -73,8 +73,24 @@ void bf1::stat_input() {
     std::cin >> fssm;
     std::cout << "sips: " << std::endl;
     std::cin >> sips;
-    std::cout << "spread: " << std::endl;
-    std::cin >> spread;
+    //std::cout << "spread: " << std::endl;
+    //std::cin >> spread;
+    std::cout << "spread_ads_stand_not_move: " << std::endl;
+    std::cin >> spread_ads_stand_not_move;
+    std::cout << "spread_ads_stand_move: " << std::endl;
+    std::cin >> spread_ads_stand_move;
+    std::cout << "spread_hip_stand_not_move: " << std::endl;
+    std::cin >> spread_hip_stand_not_move;
+    std::cout << "spread_hip_crouch_not_move: " << std::endl;
+    std::cin >> spread_hip_crouch_not_move;
+    std::cout << "spread_hip_prone_not_move: " << std::endl;
+    std::cin >> spread_hip_prone_not_move;
+    std::cout << "spread_hip_stand_move: " << std::endl;
+    std::cin >> spread_hip_stand_move;
+    std::cout << "spread_hip_crouch_move: " << std::endl;
+    std::cin >> spread_hip_crouch_move;
+    std::cout << "spread_hip_prone_move: " << std::endl;
+    std::cin >> spread_hip_prone_move;
     std::cout << "spread_max: " << std::endl;
     std::cin >> spread_max;
 
@@ -84,11 +100,64 @@ void bf1::stat_input() {
     }
 }
 
+void bf1::changeStance() {
+    std::cout << "enter desired aim state:" << std::endl;
+    std::cout << "1: ADS" << std::endl;
+    std::cout << "2: HIP" << std::endl;
+    std::cin >> desired_aim;
+    std::cout << "Enter desired movement state:" << std::endl;
+    std::cout << "1: not moving" << std::endl;
+    std::cout << "2: moving" << std::endl;
+    std::cin >> desired_movement_state;
+    std::cout << "enter desired stance:" << std::endl;
+    std::cout << "1: standing" << std::endl;
+    std::cout << "2: crouching" << std::endl;
+    std::cout << "3: prone" << std::endl;
+    std::cin >> desired_stance;
 
-//void bf1::stat_input(double weapon_stats[], std::string weapon_stat_names[]) {
-//    std::cout << "Please enter the weapon stats" << std::endl;
-//    for ( int i = 0; i <= 18; i++ ) {
-//        std::cout << weapon_stat_names[i];
-//        std::cin >> weapon_stats[i];
-//    }
-//}
+    switch (desired_aim) {
+        case 1 : //ADS
+            switch (desired_movement_state) {
+                case 1: //ADS, nmove
+                    spread = spread_ads_stand_not_move;
+                    break;
+                case 2: //ADS, move
+                    spread = spread_ads_stand_move;
+                    break;
+                default:break;
+            }
+            break;
+        case 2: //HIP
+            switch  (desired_movement_state) {
+                case 1: //HIP, nmove
+                    switch (desired_stance) {
+                        case 1: //HIP, nmove, stand
+                            spread = spread_hip_stand_not_move;
+                            break;
+                        case 2: //HIP, nmove, crouch
+                            spread = spread_hip_crouch_not_move;
+                            break;
+                    case 3: //HIP, nmove, prone
+                            spread = spread_hip_prone_not_move;
+                            break;
+                        default:break;
+                    }
+                case 2: //HIP, move
+                    switch (desired_stance) {
+                        case 1: //HIP, move, stand
+                            spread = spread_hip_stand_move;
+                            break;
+                        case 2: // HIP , move, crouch
+                            spread = spread_hip_crouch_move;
+                            break;
+                        case 3: //HIP, move, prone
+                            spread = spread_hip_prone_move;
+                            break;
+                        default:break;
+                    }
+                default:break;
+            }
+            break;
+        default:break;
+    }
+}

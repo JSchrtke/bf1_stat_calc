@@ -1,7 +1,6 @@
 ﻿// bf1_stat_calc.cpp
 /*
-TODO Make weapon stats into a class
-TODO FIGURE OUT A WAY TO HANDLE STANCES
+TODO implement stance handling for PS2
 */
 #include "stdafx.h"
 #include "bf1.h"
@@ -32,6 +31,8 @@ int main() {
 
         //manual weapon stat input
         bf1_sim.stat_input();
+
+        bf1_sim.changeStance();
 
         //main program loop
         while ( main_loop_running ) {

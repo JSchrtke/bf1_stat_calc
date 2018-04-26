@@ -17,11 +17,25 @@ class bf1 : public game {
     double fssm{};
     double sips{};
     double spread{};
+    double spread_ads_stand_not_move{};
+    double spread_ads_stand_move{};
+    double spread_hip_stand_not_move{};
+    double spread_hip_crouch_not_move{};
+    double spread_hip_prone_not_move{};
+    double spread_hip_stand_move{};
+    double spread_hip_crouch_move{};
+    double spread_hip_prone_move{};
     double spread_max{};
+    int desired_stance{};
+    int desired_aim{};
+    int desired_movement_state{};
 
 public:
     void simulation();
 
     void stat_input();
+
+    void changeStance();
+
 };
 #endif //TEST_THINGS_2_BF1_H

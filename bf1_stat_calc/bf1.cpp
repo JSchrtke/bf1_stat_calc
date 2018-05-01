@@ -3,7 +3,8 @@
 #include <string>
 #include "bf1.h"
 
-void bf1::simulation() {
+void bf1::simulation()
+{
 
     /*
      * this variable stores how many times the simulation has run, this is used later as the denominator when
@@ -27,39 +28,49 @@ void bf1::simulation() {
     shots_in_burst.resize(burst_length);
 
     // this first for loop runs the simulation a certain number of times, specified by the user
-    for ( int i = 0; i < hitrate_sim_count; i++ ) {
+    for ( int i = 0; i < hitrate_sim_count; i++ )
+    {
         // This calculation is needed to convert the value of the spread from an angle to a length
         spread_radius = offset(distance, spread);
         // this second for-loop runs the single-bullet simulation for each bullet in the burst
-        for ( int j = 0; j < burst_length; j++ ) {
+        for ( int j = 0; j < burst_length; j++ )
+        {
 
             hrec_magnitude = random_number_double(hrec_l, hrec_r);
             shots_in_burst[j] = shots_in_burst[j] + single_bullet_sim();
             // this needs to change every simulation run due to horizontal recoil
-            spread_position_x = spread_position_x + offset(distance, hrec_magnitude);
+            spread_position_x =
+                    spread_position_x + offset(distance, hrec_magnitude);
 
             /*
              * This conditional statement checks if its is the first shot in the burst(first statement) or if the
              * maximum or minimum spread value has been reached (second statement)
              */
-            if ( j == 0 ) {
+            if ( j == 0 )
+            {
                 /*
                  * first shot in the burst, so this expression increases the spread radius using the
                  * first-shot-spread-multiplier
                  */
                 spread_radius = spread_radius + offset(distance, sips * fssm);
                 current_spread_angle = current_spread_angle + sips * fssm;
+            }
                 /*
                  * This statement needs to keep the spread radius constant because either the minimum or maximum spread
                  * was reached
                  */
-            } else if ( current_spread_angle >= spread_max || current_spread_angle <= spread ) {
+            else if ( current_spread_angle >= spread_max ||
+                      current_spread_angle <= spread )
+            {
+
                 spread_radius = spread_radius;
+            }
                 /*
                  * any shot in the burst that isn't the first, or for which max or min spread hasn't been reached.
                  * Spread gets increased using the normal spread increase per shot
                  */
-            } else {
+            else
+            {
                 spread_radius = spread_radius + offset(distance, sips);
                 current_spread_angle = current_spread_angle + sips;
             }
@@ -71,7 +82,8 @@ void bf1::simulation() {
 
     }
     std::cout << "final results" << std::endl;
-    for ( int k = 0; k < burst_length; k++ ) {
+    for ( int k = 0; k < burst_length; k++ )
+    {
         // The hitchances need to be divided by the amount of simulation runs to get the average hitchance
         shots_in_burst[k] = shots_in_burst[k] / sim_counter;
 
@@ -86,12 +98,14 @@ void bf1::simulation() {
      * The vector for storing the bullets hitchances needs to be reset so the simulation can run again without having
      * residual calculations stored
      */
-    for ( int k = 0; k < burst_length; k++ ) {
+    for ( int k = 0; k < burst_length; k++ )
+    {
         shots_in_burst[k] = 0;
     }
 }
 
-void bf1::stat_input() {
+void bf1::stat_input()
+{
     std::cout << "hrec_l: " << std::endl;
     std::cin >> hrec_l;
     std::cout << "hrec_r: " << std::endl;
@@ -124,12 +138,14 @@ void bf1::stat_input() {
      * values for left and right horizontal recoil; in this program left is handled as a negative value while right is
      * a positive value
      */
-    if ( hrec_l > 0 ) {
+    if ( hrec_l > 0 )
+    {
         hrec_l = hrec_l * -1;
     }
 }
 
-void bf1::changeStance() {
+void bf1::changeStance()
+{
     std::cout << "enter desired aim state:" << std::endl;
     std::cout << "1: ADS" << std::endl;
     std::cout << "2: HIP" << std::endl;
@@ -144,10 +160,11 @@ void bf1::changeStance() {
     std::cout << "3: prone" << std::endl;
     std::cin >> desired_stance;
 
-    switch ( desired_aim ) {
+    switch ( desired_aim )
+    {
         case 1 : //ADS
-            switch ( desired_movement_state ) {
-
+            switch ( desired_movement_state )
+            {
                 case 1: //ADS, nmove
                     spread = spread_ads_stand_not_move;
                     break;
@@ -159,9 +176,11 @@ void bf1::changeStance() {
             }
             break;
         case 2: //HIP
-            switch ( desired_movement_state ) {
+            switch ( desired_movement_state )
+            {
                 case 1: //HIP, nmove
-                    switch ( desired_stance ) {
+                    switch ( desired_stance )
+                    {
                         case 1: //HIP, nmove, stand
                             spread = spread_hip_stand_not_move;
                             break;
@@ -175,7 +194,8 @@ void bf1::changeStance() {
                             break;
                     }
                 case 2: //HIP, move
-                    switch ( desired_stance ) {
+                    switch ( desired_stance )
+                    {
                         case 1: //HIP, move, stand
                             spread = spread_hip_stand_move;
                             break;

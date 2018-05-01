@@ -5,7 +5,8 @@
 #include <string>
 #include "game.h"
 
-class bf1 : public game {
+class bf1 : public game
+{
     // variables for weapon stats
     double hrec_l{};
     double hrec_r{};
@@ -33,4 +34,5 @@ public:
     void changeStance();
 
 };
+
 #endif //TEST_THINGS_2_BF1_H

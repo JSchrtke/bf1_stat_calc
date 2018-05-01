@@ -2,7 +2,8 @@
 #define TEST_THINGS_2_GAME_H
 
 
-class game {
+class game
+{
 protected:
 //x/y coordinates of the center of the target
     double target_position_x = 0.0;
@@ -17,7 +18,7 @@ protected:
     //radius of the spread
     double spread_radius = 0;
     //magnitude of hrec, this is a random number between hrec_l and hrec_r
-    double hrec_magnitude;
+    double hrec_magnitude{};
     //stores burst length
     unsigned long long int burst_length = 5;
     //variable to specify how many times the simulation runs
@@ -25,11 +26,11 @@ protected:
 public:
     double dist_betw_points(double x_1, double y_1, double x_2, double y_2);
 
-    double offset (double distance, double angle);
+    double offset(double distance, double angle);
 
-    double random_number_double (double rand_num_min, double rand_num_max);
+    double random_number_double(double rand_num_min, double rand_num_max);
 
-    double single_bullet_sim ();
+    double single_bullet_sim();
 
     void GetTargetRadius();
 

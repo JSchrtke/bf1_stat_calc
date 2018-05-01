@@ -35,9 +35,11 @@ Current features:
 
     All Games:
     - Calculate ideal burst length
-      - ideal burst length would be the number of shots one can fire without loosing to much accuracy, so probably > 90% hitrate
+      - ideal burst length would be the number of shots one can fire without loosing to much 
+        accuracy, so probably > 90% hitrate
     - Calculate ideal timing between bursts
-      - ideal timing meaning the time it takes for the accumulated spread during a burst to reset
+      - ideal timing meaning the time it takes for the accumulated spread during a burst to 
+        reset
     - Calculate effective damage per second(DPS)/time to kill(TTK)
       - based on the ideal burst length and reset time in between
     - Import weapon stats from file/database

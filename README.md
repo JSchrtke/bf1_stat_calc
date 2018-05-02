@@ -1,15 +1,15 @@
 # bf1_stat_calc
 
-### A Battlefield 1 weapon statistics calculator
+## A Battlefield 1 weapon statistics calculator
 
 This Program is supposed to be, at some point, a comprehensive weapon stat calculator for Battlefield 1 and games with similar mechanics.
 It also serves as a continuous project for me to learn C++ on and will be improved and changed constanly as I learn new things.
 
-#### Current features/functionality
+### Current features/functionality
 
 All parts of the program currently run in command-line only.
 
-Current features:
+#### Current features:
 
     Battlefield 1:
 

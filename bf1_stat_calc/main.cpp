@@ -31,36 +31,36 @@ int main()
     {
 
         cout << "you chose BF1" << endl;
-        bf1 bf1_sim;
+        Bf1 Bf1_sim;
 
-        bf1_sim.stat_input();
+        Bf1_sim.statInput();
 
-        bf1_sim.changeStance();
+        Bf1_sim.changeStance();
 
         // main program loop; while this is "true" the program will run
         while ( main_loop_running )
         {
-            bf1_sim.GetSimulationVariables();
+            Bf1_sim.getSimulationVariables();
 
-            bf1_sim.simulation();
+            Bf1_sim.simulation();
 
-            main_loop_running = cont_quit();
+            main_loop_running = contQuit();
         }
         return 0;
     }
     else if ( game_choice == 1 )
     {
         cout << "you chose PS2" << endl;
-        ps2 ps2_sim;
+        Ps2 Ps2_sim;
 
-        ps2_sim.stat_input();
+        Ps2_sim.statInput();
 
         while ( main_loop_running )
         {
-            ps2_sim.GetSimulationVariables();
+            Ps2_sim.getSimulationVariables();
 
-            ps2_sim.simulation();
-            main_loop_running = cont_quit();
+            Ps2_sim.simulation();
+            main_loop_running = contQuit();
         }
         return 0;
     }

@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-class ps2 : public game
+class Ps2 : public Game
 {
     double hrec_min{};
     double hrec_max{};
@@ -18,7 +18,7 @@ class ps2 : public game
 public:
     void simulation();
 
-    void stat_input();
+    void statInput();
 };
 
 #endif //BF1_STAT_CALC_PS2_H

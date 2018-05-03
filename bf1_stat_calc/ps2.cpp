@@ -3,7 +3,7 @@
 #include <string>
 #include "ps2.h"
 
-void ps2::simulation()
+void Ps2::simulation()
 {
 
     int sim_counter = 0;
@@ -12,19 +12,15 @@ void ps2::simulation()
     std::vector<double> shots_in_burst;
     shots_in_burst.resize(burst_length);
 
-    for ( int i = 0;
-          i <
-          hitrate_sim_count; i++ ) //this loop simulates the hitrate for the # specified by user input
+    for ( int i = 0; i < hitrate_sim_count; i++ )
     {
         double hrec_tol_check = 0;
         int hrec_l_r = 0;
         double rand_double = 0;
         spread_radius = offset(distance, spread);
-        for ( int j = 0; j <
-                         burst_length; j++ ) //this loop simulates the hitrate for each bullet in the given
-            // burst length, then stores the value in the array (shots_in_burst)
+        for ( int j = 0; j < burst_length; j++ )
         {
-            hrec_magnitude = random_number_double(hrec_min, hrec_max);
+            hrec_magnitude = randomNumberGenerator(hrec_min, hrec_max);
             if ( hrec_tol_check <= (hrec_tol * -1))
             {
                 hrec_l_r = 1;
@@ -37,7 +33,7 @@ void ps2::simulation()
             {
                 while ( rand_double == 0 )
                 {
-                    rand_double = random_number_double(-1, 1);
+                    rand_double = randomNumberGenerator(-1, 1);
                     if ( rand_double < 0 )
                     {
                         hrec_l_r = -1;
@@ -55,7 +51,7 @@ void ps2::simulation()
             rand_double = 0;
             hrec_magnitude = hrec_magnitude * hrec_l_r;
             hrec_tol_check = hrec_tol_check + hrec_magnitude;
-            shots_in_burst[j] = shots_in_burst[j] + single_bullet_sim();
+            shots_in_burst[j] = shots_in_burst[j] + singleBulletSim();
 
             spread_position_x = spread_position_x + offset(distance,
                                                            hrec_magnitude); // offsets spread_position_x due
@@ -107,7 +103,7 @@ void ps2::simulation()
     sim_counter = 0;
 }
 
-void ps2::stat_input()
+void Ps2::statInput()
 {
     std::cout << "hrec_min: " << std::endl;
     std::cin >> hrec_min;

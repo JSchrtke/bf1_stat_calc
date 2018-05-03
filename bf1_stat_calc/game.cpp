@@ -10,7 +10,7 @@
  * This function calculates the distance between to cartesian coordinates. In this program, the distance between the
  * spread and target circle is needed to calculate the amount of overlap and by that the htichance
  */
-double game::dist_betw_points(double x_1, double y_1, double x_2, double y_2)
+double Game::distBetwPoints(double x_1, double y_1, double x_2, double y_2)
 {
     double dist_x, dist_y, dist_points;
     dist_x = std::abs(x_1) + std::abs(x_2);
@@ -22,7 +22,7 @@ double game::dist_betw_points(double x_1, double y_1, double x_2, double y_2)
 /*
  * This function converts an angle into a length, being given a distance.
  */
-double game::offset(double distance, double angle)
+double Game::offset(double distance, double angle)
 {
     double hrec_hor_shift;
     hrec_hor_shift = tan(angle * (PI / 180)) * distance;
@@ -30,7 +30,7 @@ double game::offset(double distance, double angle)
 }
 
 // RNG
-double game::random_number_double(double rand_num_min, double rand_num_max)
+double Game::randomNumberGenerator(double rand_num_min, double rand_num_max)
 {
     auto seed = std::chrono::system_clock::now().time_since_epoch().count();
     static std::mt19937 gen(seed);
@@ -40,13 +40,13 @@ double game::random_number_double(double rand_num_min, double rand_num_max)
 }
 
 // Function that calculates the hitchance for a single bullet
-double game::single_bullet_sim()
+double Game::singleBulletSim()
 {
     /*
      * the distance between the spread circle and target circle needs to be calculated to determine how much they
      * overlap
      */
-    double dist_circles = dist_betw_points(target_position_x, target_position_y,
+    double dist_circles = distBetwPoints(target_position_x, target_position_y,
                                            spread_position_x,
                                            spread_position_y);
     /*
@@ -98,34 +98,34 @@ double game::single_bullet_sim()
     return hit_miss;
 }
 
-void game::GetTargetRadius()
+void Game::getTargetRadius()
 {
     std::cout << "enter the target size(radius in m): ";
     std::cin >> target_radius;
 }
 
-void game::GetDistance()
+void Game::getDistance()
 {
     std::cout << "enter the distance: ";
     std::cin >> distance;
 }
 
-void game::GetBurstLength()
+void Game::getBurstLength()
 {
     std::cout << "enter burst length: ";
     std::cin >> burst_length;
 }
 
-void game::GetHitrateSimCount()
+void Game::getHitrateSimCount()
 {
     std::cout << "Enter simulation run count: ";
     std::cin >> hitrate_sim_count;
 }
 
-void game::GetSimulationVariables()
+void Game::getSimulationVariables()
 {
-    GetDistance();
-    GetTargetRadius();
-    GetBurstLength();
-    GetHitrateSimCount();
+    getDistance();
+    getTargetRadius();
+    getBurstLength();
+    getHitrateSimCount();
 }

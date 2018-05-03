@@ -2,7 +2,7 @@
 #define TEST_THINGS_2_GAME_H
 
 
-class game
+class Game
 {
 protected:
 //x/y coordinates of the center of the target
@@ -24,23 +24,23 @@ protected:
     //variable to specify how many times the simulation runs
     int hitrate_sim_count = 1;
 public:
-    double dist_betw_points(double x_1, double y_1, double x_2, double y_2);
+    double distBetwPoints(double x_1, double y_1, double x_2, double y_2);
 
     double offset(double distance, double angle);
 
-    double random_number_double(double rand_num_min, double rand_num_max);
+    double randomNumberGenerator(double rand_num_min, double rand_num_max);
 
-    double single_bullet_sim();
+    double singleBulletSim();
 
-    void GetTargetRadius();
+    void getTargetRadius();
 
-    void GetDistance();
+    void getDistance();
 
-    void GetBurstLength();
+    void getBurstLength();
 
-    void GetHitrateSimCount();
+    void getHitrateSimCount();
 
-    void GetSimulationVariables();
+    void getSimulationVariables();
 
 };
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "continue_quit_function.h"
 
-bool cont_quit()
+bool contQuit()
 {
     char continue_quit_loop = 'y';
     bool main_loop_running = true;

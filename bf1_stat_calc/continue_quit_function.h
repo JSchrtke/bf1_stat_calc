@@ -5,6 +5,6 @@
 #ifndef BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H
 #define BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H
 
-bool cont_quit();
+bool contQuit();
 
 #endif //BF1_STAT_CALC_CONTINUE_QUIT_FUNCTION_H

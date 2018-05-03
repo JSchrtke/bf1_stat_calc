@@ -3,7 +3,7 @@
 #include <string>
 #include "bf1.h"
 
-void bf1::simulation()
+void Bf1::simulation()
 {
 
     /*
@@ -36,8 +36,8 @@ void bf1::simulation()
         for ( int j = 0; j < burst_length; j++ )
         {
 
-            hrec_magnitude = random_number_double(hrec_l, hrec_r);
-            shots_in_burst[j] = shots_in_burst[j] + single_bullet_sim();
+            hrec_magnitude = randomNumberGenerator(hrec_l, hrec_r);
+            shots_in_burst[j] = shots_in_burst[j] + singleBulletSim();
             // this needs to change every simulation run due to horizontal recoil
             spread_position_x =
                     spread_position_x + offset(distance, hrec_magnitude);
@@ -104,7 +104,7 @@ void bf1::simulation()
     }
 }
 
-void bf1::stat_input()
+void Bf1::statInput()
 {
     std::cout << "hrec_l: " << std::endl;
     std::cin >> hrec_l;
@@ -144,7 +144,7 @@ void bf1::stat_input()
     }
 }
 
-void bf1::changeStance()
+void Bf1::changeStance()
 {
     std::cout << "enter desired aim state:" << std::endl;
     std::cout << "1: ADS" << std::endl;

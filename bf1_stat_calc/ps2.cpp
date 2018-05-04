@@ -10,15 +10,15 @@ void Ps2::simulation()
     double current_spread_angle = spread;
     double hrec_magnitude;
     std::vector<double> shots_in_burst;
-    shots_in_burst.resize(burst_length);
+    shots_in_burst.resize(burst_length_);
 
-    for( int i = 0; i < hitrate_sim_count; i++ )
+    for( int i = 0; i < hitrate_sim_count_; i++ )
     {
         double hrec_tol_check = 0;
         int hrec_l_r = 0;
         double rand_double = 0;
-        spread_radius = offset(distance, spread);
-        for( int j = 0; j < burst_length; j++ )
+        spread_radius_ = offset(distance_, spread);
+        for( int j = 0; j < burst_length_; j++ )
         {
             hrec_magnitude = randomNumberGenerator(hrec_min, hrec_max);
             if( hrec_tol_check <= (hrec_tol * -1))
@@ -53,33 +53,33 @@ void Ps2::simulation()
             hrec_tol_check = hrec_tol_check + hrec_magnitude;
             shots_in_burst[j] = shots_in_burst[j] + singleBulletSim();
 
-            // offsets spread_position_x due to horizontal recoil
-            spread_position_x = spread_position_x + offset(distance, hrec_magnitude);
+            // offsets spread_position_x_ due to horizontal recoil
+            spread_position_x_ = spread_position_x_ + offset(distance_, hrec_magnitude);
 
             if( j == 0 )
             {
-                // increases spread_radius using fssm
-                spread_radius = spread_radius + offset(distance, sips * fssm);
+                // increases spread_radius_ using fssm
+                spread_radius_ = spread_radius_ + offset(distance_, sips * fssm);
                 current_spread_angle = current_spread_angle + sips * fssm;
             }
             else if( current_spread_angle >= spread_max || current_spread_angle <= spread )
             {
-                spread_radius = spread_radius;
+                spread_radius_ = spread_radius_;
             }
             else
             {
-                //increases spread_radius due to spread increase per shot
-                spread_radius = spread_radius + offset(distance, sips);
+                //increases spread_radius_ due to spread increase per shot
+                spread_radius_ = spread_radius_ + offset(distance_, sips);
                 current_spread_angle = current_spread_angle + sips;
             }
         }
         sim_counter++;
-        spread_position_x = 0.0;
+        spread_position_x_ = 0.0;
         current_spread_angle = spread;
         hrec_tol_check = 0.0;
     }
     std::cout << "final results" << std::endl;
-    for( int k = 0; k < burst_length; k++ )
+    for( int k = 0; k < burst_length_; k++ )
     {
         shots_in_burst[k] = shots_in_burst[k] / sim_counter;
         std::cout << "shot #";
@@ -90,7 +90,7 @@ void Ps2::simulation()
     }
 
     //resets the shots_in_burst array after printing the results
-    for( int k = 0; k < burst_length; k++ )
+    for( int k = 0; k < burst_length_; k++ )
     {
         shots_in_burst[k] = 0;
     }

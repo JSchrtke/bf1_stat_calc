@@ -5,83 +5,60 @@
 
 void Bf1::simulation()
 {
-
-    /*
-     * this variable stores how many times the simulation has run, this is
-     * used later as the denominator when calculating the average hitrate
-     * from all the simulation runs
-     */
+    /* this variable stores how many times the simulation has run, this is used later as the denominator when
+     * calculating the average hitrate from all the simulation runs */
     int sim_counter = 0;
-    /*
-     * This is used to later check if the minimum or maximum spread value has
-     * been reached
-     */
+
+    //This is used to later check if the minimum or maximum spread value has been reached
     double current_spread_angle = spread;
-    /*
-     * This variable needs to be calculated for every simulation run, because
-     * the horizontal recoil is a random value between a minimum and a maximum
-     */
+
+    /* This variable needs to be calculated for every simulation run, because the horizontal recoil is a random value
+     * between a minimum and a maximum */
     double hrec_magnitude;
-    /*
-     * This vector stores the sum of all the individual bullet's hitchances.
-     * Later gets divided by sim_counter to get the average hitchance
-     */
+
+    /* This vector stores the sum of all the individual bullet's hitchances. Later gets divided by sim_counter to get
+     * the average hitchance */
     std::vector<double> shots_in_burst;
 
-    /*
-     * This needs to be the size of the burst length to be able to store the
-     * combined hitchances for all shots
-     */
-    shots_in_burst.resize (burst_length);
+    //This needs to be the size of the burst length to be able to store the combined hitchances for all shots
+    shots_in_burst.resize (burst_length_);
 
-    /*
-     * this first for loop runs the simulation a certain number of times,
-     * specified by the user
-     */
-    for ( int i = 0; i < hitrate_sim_count; i++ )
+    // this first for loop runs the simulation a certain number of times, specified by the user
+    for ( int i = 0; i < hitrate_sim_count_; i++ )
     {
         /*
          * This calculation is needed to convert the value of the spread from
          * an angle to a length
          */
-        spread_radius = offset (distance, spread);
+        spread_radius_ = offset (distance_ , spread);
         /*
          * this second for-loop runs the single-bullet simulation for each
          * bullet in the burst
          */
-        for ( int j = 0; j < burst_length; j++ )
+        for ( int j = 0; j < burst_length_; j++ )
         {
-
             hrec_magnitude = randomNumberGenerator (hrec_l, hrec_r);
             shots_in_burst[j] = shots_in_burst[j] + singleBulletSim ();
 
             // this needs to change every sim run due to horizontal recoil
-            spread_position_x = spread_position_x +
-                                offset (distance, hrec_magnitude);
+            spread_position_x_ = spread_position_x_ +
+                                offset (distance_, hrec_magnitude);
 
-            /*
-             * This conditional statement checks if its is the first shot in
-             * the burst(first statement) or if the maximum or minimum spread
-             * value has been reached (second statement)
-             */
+            /* This conditional statement checks if its is the first shot in the burst(first statement) or if the
+             * maximum or minimum spread value has been reached (second statement) */
             if ( j == 0 )
             {
-                /*
-                 * first shot in the burst, so this expression increases the
-                 * spread radius using the first-shot-spread-multiplier
-                 */
-                spread_radius = spread_radius + offset (distance, sips * fssm);
+                /* first shot in the burst, so this expression increases the spread radius using the
+                 * first-shot-spread-multiplier */
+                spread_radius_ = spread_radius_ + offset (distance_, sips * fssm);
                 current_spread_angle = current_spread_angle + sips * fssm;
             }
                 /*
                  * This statement needs to keep the spread radius constant
-                 * because either the minimum or maximum spread was reached
-                 */
-            else if ( current_spread_angle >= spread_max ||
-                      current_spread_angle <= spread )
+                 * because either the minimum or maximum spread was reached */
+            else if ( current_spread_angle >= spread_max || current_spread_angle <= spread )
             {
-
-                spread_radius = spread_radius;
+                spread_radius_ = spread_radius_;
             }
                 /*
                  * any shot in the burst that isn't the first, or for which
@@ -90,7 +67,7 @@ void Bf1::simulation()
                  */
             else
             {
-                spread_radius = spread_radius + offset (distance, sips);
+                spread_radius_ = spread_radius_ + offset (distance_, sips);
                 current_spread_angle = current_spread_angle + sips;
             }
         }
@@ -99,12 +76,12 @@ void Bf1::simulation()
          * The position of the spread needs to be reset to the starting
          * position after the burst
          */
-        spread_position_x = 0.0;
+        spread_position_x_ = 0.0;
         current_spread_angle = spread;
 
     }
     std::cout << "final results" << std::endl;
-    for ( int k = 0; k < burst_length; k++ )
+    for ( int k = 0; k < burst_length_; k++ )
     {
         /*
          * The hitchances need to be divided by the amount of simulation runs
@@ -123,7 +100,7 @@ void Bf1::simulation()
      * The vector for storing the bullets hitchances needs to be reset so the
      * simulation can run again without having residual calculations stored
      */
-    for ( int k = 0; k < burst_length; k++ )
+    for ( int k = 0; k < burst_length_; k++ )
     {
         shots_in_burst[k] = 0;
     }

@@ -17,11 +17,11 @@ protected:
     double spread_position_x_ = 0.0;
     double spread_position_y_ = 0.0;
 
-    //distance to target
-    double distance_ = 30.0;
-
     //radius of the spread
     double spread_radius_ = 0;
+
+    //distance to target
+    double distance_ = 30.0;
 
     //magnitude of hrec, this is a random number between hrec_l and hrec_r
     double hrec_magnitude_{};

@@ -3,90 +3,65 @@
 #include <string>
 #include "bf1.h"
 
-void Bf1::simulation()
+void Bf1::Simulation()
 {
-    /* this variable stores how many times the simulation has run, this is used later as the denominator when
-     * calculating the average hitrate from all the simulation runs */
     int sim_counter = 0;
-
-    //This is used to later check if the minimum or maximum spread value has been reached
-    double current_spread_angle = spread;
-
-    /* This variable needs to be calculated for every simulation run, because the horizontal recoil is a random value
-     * between a minimum and a maximum */
+    double current_spread_angle = spread_;
     double hrec_magnitude;
-
-    /* This vector stores the sum of all the individual bullet's hitchances. Later gets divided by sim_counter to get
-     * the average hitchance */
     std::vector<double> shots_in_burst;
 
-    //This needs to be the size of the burst length to be able to store the combined hitchances for all shots
+    // vector needs to be resized to fit the length of the burst
     shots_in_burst.resize (burst_length_);
 
-    // this first for loop runs the simulation a certain number of times, specified by the user
+    // Loop for one full burst simulation
     for ( int i = 0; i < hitrate_sim_count_; i++ )
     {
-        /*
-         * This calculation is needed to convert the value of the spread from
-         * an angle to a length
-         */
-        spread_radius_ = offset (distance_ , spread);
-        /*
-         * this second for-loop runs the single-bullet simulation for each
-         * bullet in the burst
-         */
+        spread_radius_ = offset (distance_, spread_);
+
+        // Loop for a single bullet sim
         for ( int j = 0; j < burst_length_; j++ )
         {
-            hrec_magnitude = randomNumberGenerator (hrec_l, hrec_r);
+            hrec_magnitude = randomNumberGenerator (hrec_l_, hrec_r_);
             shots_in_burst[j] = shots_in_burst[j] + singleBulletSim ();
 
             // this needs to change every sim run due to horizontal recoil
             spread_position_x_ = spread_position_x_ +
                                 offset (distance_, hrec_magnitude);
 
-            /* This conditional statement checks if its is the first shot in the burst(first statement) or if the
-             * maximum or minimum spread value has been reached (second statement) */
+            /* This conditional statement checks if its is the first shot in the burst(first statement) or if
+             * the maximum or minimum spread value has been reached (second statement) */
             if ( j == 0 )
             {
                 /* first shot in the burst, so this expression increases the spread radius using the
                  * first-shot-spread-multiplier */
-                spread_radius_ = spread_radius_ + offset (distance_, sips * fssm);
-                current_spread_angle = current_spread_angle + sips * fssm;
+                spread_radius_ = spread_radius_ + offset (distance_, sips_ * fssm_);
+                current_spread_angle = current_spread_angle + sips_ * fssm_;
             }
-                /*
-                 * This statement needs to keep the spread radius constant
-                 * because either the minimum or maximum spread was reached */
-            else if ( current_spread_angle >= spread_max || current_spread_angle <= spread )
+                /* This statement needs to keep the spread radius constant because either the minimum or
+                 * maximum spread was reached */
+            else if ( current_spread_angle >= spread_max_ || current_spread_angle <= spread_ )
             {
                 spread_radius_ = spread_radius_;
             }
-                /*
-                 * any shot in the burst that isn't the first, or for which
-                 * max or min spread hasn't been reached. Spread gets
-                 * increased using the normal spread increase per shot
-                 */
+                /* any shot in the burst that isn't the first, or for which max or min spread hasn't been
+                 * reached. Spread gets increased using the normal spread increase per shot */
             else
             {
-                spread_radius_ = spread_radius_ + offset (distance_, sips);
-                current_spread_angle = current_spread_angle + sips;
+                spread_radius_ = spread_radius_ + offset (distance_, sips_);
+                current_spread_angle = current_spread_angle + sips_;
             }
         }
         sim_counter++;
-        /*
-         * The position of the spread needs to be reset to the starting
-         * position after the burst
-         */
+
+        //The position of the spread needs to be reset to the starting position after the burst
         spread_position_x_ = 0.0;
-        current_spread_angle = spread;
+        current_spread_angle = spread_;
 
     }
     std::cout << "final results" << std::endl;
     for ( int k = 0; k < burst_length_; k++ )
     {
-        /*
-         * The hitchances need to be divided by the amount of simulation runs
-         * to get the average hitchance
-         */
+        //The hitchances need to be divided by the amount of simulation runs to get the average hitchance
         shots_in_burst[k] = shots_in_burst[k] / sim_counter;
 
         std::cout << "shot #";
@@ -95,118 +70,180 @@ void Bf1::simulation()
         std::cout << shots_in_burst[k] * 100;
         std::cout << " %" << std::endl;
     }
-
-    /*
-     * The vector for storing the bullets hitchances needs to be reset so the
-     * simulation can run again without having residual calculations stored
-     */
+    /* The vector for storing the bullets hitchances needs to be reset so the simulation can run again
+     * without having residual calculations stored */
     for ( int k = 0; k < burst_length_; k++ )
     {
         shots_in_burst[k] = 0;
     }
 }
 
-void Bf1::statInput()
+void Bf1::StatInput()
 {
     std::cout << "hrec_l: " << std::endl;
-    std::cin >> hrec_l;
+    std::cin >> hrec_l_;
     std::cout << "hrec_r: " << std::endl;
-    std::cin >> hrec_r;
+    std::cin >> hrec_r_;
     std::cout << "fssm: " << std::endl;
-    std::cin >> fssm;
+    std::cin >> fssm_;
     std::cout << "sips: " << std::endl;
-    std::cin >> sips;
+    std::cin >> sips_;
     std::cout << "spread_ads_stand_not_move: " << std::endl;
-    std::cin >> spread_ads_stand_not_move;
-    std::cout << "spread_ads_stand_move: " << std::endl;
-    std::cin >> spread_ads_stand_move;
-    std::cout << "spread_hip_stand_not_move: " << std::endl;
-    std::cin >> spread_hip_stand_not_move;
-    std::cout << "spread_hip_crouch_not_move: " << std::endl;
-    std::cin >> spread_hip_crouch_not_move;
-    std::cout << "spread_hip_prone_not_move: " << std::endl;
-    std::cin >> spread_hip_prone_not_move;
-    std::cout << "spread_hip_stand_move: " << std::endl;
-    std::cin >> spread_hip_stand_move;
-    std::cout << "spread_hip_crouch_move: " << std::endl;
-    std::cin >> spread_hip_crouch_move;
-    std::cout << "spread_hip_prone_move: " << std::endl;
-    std::cin >> spread_hip_prone_move;
+    std::cin >> spread_ads_stand_not_move_;
+    std::cout << "spread_ads_stand_move_: " << std::endl;
+    std::cin >> spread_ads_stand_move_;
+    std::cout << "spread_hip_stand_not_move_: " << std::endl;
+    std::cin >> spread_hip_stand_not_move_;
+    std::cout << "spread_hip_crouch_not_move_: " << std::endl;
+    std::cin >> spread_hip_crouch_not_move_;
+    std::cout << "spread_hip_prone_not_move_: " << std::endl;
+    std::cin >> spread_hip_prone_not_move_;
+    std::cout << "spread_hip_stand_move_: " << std::endl;
+    std::cin >> spread_hip_stand_move_;
+    std::cout << "spread_hip_crouch_move_: " << std::endl;
+    std::cin >> spread_hip_crouch_move_;
+    std::cout << "spread_hip_prone_move_: " << std::endl;
+    std::cin >> spread_hip_prone_move_;
     std::cout << "spread_max: " << std::endl;
-    std::cin >> spread_max;
+    std::cin >> spread_max_;
 
-    /*
-     * converts the stat for left hrec to a negative number; this needs to be
-     * done because the BF1 weapon data specifies values for left and right
-     * horizontal recoil; in this program left is  handled as a negative
-     * value while right is a positive value
-     */
-    if ( hrec_l > 0 )
+    SpreadData.insert(std::make_pair(GetSpreadModifier(ADS, NotMoving, Standing),
+                                     spread_ads_stand_not_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(ADS, Moving, Standing),
+                                     spread_ads_stand_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(Hipfire, NotMoving, Standing),
+                                     spread_hip_stand_not_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(Hipfire, NotMoving, Crouching),
+                                     spread_hip_crouch_not_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(Hipfire, NotMoving, Prone),
+                                     spread_hip_prone_not_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(Hipfire, Moving, Standing),
+                                    spread_hip_stand_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(Hipfire, Moving, Crouching),
+                                    spread_hip_crouch_move_));
+    SpreadData.insert(std::make_pair(GetSpreadModifier(Hipfire, Moving, Prone),
+                                    spread_hip_prone_move_));
+
+    /* converts the stat for left hrec to a negative number; this needs to be done because the BF1 weapon
+     * data specifies values for left and right horizontal recoil; in this program left is  handled as a
+     * negative value while right is a positive value */
+    if ( hrec_l_ > 0 )
     {
-        hrec_l = hrec_l * -1;
+        hrec_l_ = hrec_l_ * -1;
     }
 }
 
-void Bf1::changeStance()
+
+Bf1::SpreadModifier Bf1::GetSpreadModifier(AimState aimState, Movement movement, Stance stance)
+{
+    SpreadModifier spreadModifier{};
+
+    switch(aimState)
+    {
+        case ADS:
+            spreadModifier.aimState = ADS;
+            break;
+        case Hipfire:
+            spreadModifier.aimState = Hipfire;
+            break;
+        default:
+            std::cout << "Error! invalid aim state" << std::endl;
+            break;
+    }
+    switch(movement)
+    {
+        case NotMoving:
+            spreadModifier.movement = NotMoving;
+            break;
+        case Moving:
+            spreadModifier.movement = Moving;
+            break;
+        default:
+            std::cout << "Error! invalid movement state" << std::endl;
+            break;
+    }
+    switch(stance)
+    {
+        case Standing:
+            spreadModifier.stance = Standing;
+            break;
+        case Crouching:
+            spreadModifier.stance = Crouching;
+            break;
+        case Prone:
+            spreadModifier.stance = Prone;
+            break;
+        default:
+            std::cout << "Error! invalid stance" << std::endl;
+    }
+    return spreadModifier;
+}
+
+double Bf1::GetSpreadValue(Bf1::AimState aimState, Bf1::Movement movement, Bf1::Stance stance)
+{
+    return SpreadData.at(GetSpreadModifier(aimState, movement, stance));
+}
+
+void Bf1::ChangeStance()
 {
     std::cout << "enter desired aim state:" << std::endl;
     std::cout << "1: ADS" << std::endl;
     std::cout << "2: HIP" << std::endl;
-    std::cin >> desired_aim;
+    std::cin >> desired_aim_;
     std::cout << "Enter desired movement state:" << std::endl;
     std::cout << "1: not moving" << std::endl;
     std::cout << "2: moving" << std::endl;
-    std::cin >> desired_movement_state;
+    std::cin >> desired_movement_state_;
     std::cout << "enter desired stance:" << std::endl;
     std::cout << "1: standing" << std::endl;
     std::cout << "2: crouching" << std::endl;
     std::cout << "3: prone" << std::endl;
-    std::cin >> desired_stance;
+    std::cin >> desired_stance_;
 
-    switch ( desired_aim )
+    switch ( desired_aim_ )
     {
         case 1 : //ADS
-            switch ( desired_movement_state )
+            switch ( desired_movement_state_ )
             {
                 case 1: //ADS, nmove
-                    spread = spread_ads_stand_not_move;
+                    spread_ = spread_ads_stand_not_move_;
                     break;
                 case 2: //ADS, move
-                    spread = spread_ads_stand_move;
+                    spread_ = spread_ads_stand_move_;
                     break;
                 default:
                     break;
             }
             break;
         case 2: //HIP
-            switch ( desired_movement_state )
+            switch ( desired_movement_state_ )
             {
                 case 1: //HIP, nmove
-                    switch ( desired_stance )
+                    switch ( desired_stance_ )
                     {
                         case 1: //HIP, nmove, stand
-                            spread = spread_hip_stand_not_move;
+                            spread_ = spread_hip_stand_not_move_;
                             break;
                         case 2: //HIP, nmove, crouch
-                            spread = spread_hip_crouch_not_move;
+                            spread_ = spread_hip_crouch_not_move_;
                             break;
                         case 3: //HIP, nmove, prone
-                            spread = spread_hip_prone_not_move;
+                            spread_ = spread_hip_prone_not_move_;
                             break;
                         default:
                             break;
                     }
                 case 2: //HIP, move
-                    switch ( desired_stance )
+                    switch ( desired_stance_ )
                     {
                         case 1: //HIP, move, stand
-                            spread = spread_hip_stand_move;
+                            spread_ = spread_hip_stand_move_;
                             break;
                         case 2: // HIP , move, crouch
-                            spread = spread_hip_crouch_move;
+                            spread_ = spread_hip_crouch_move_;
                             break;
                         case 3: //HIP, move, prone
-                            spread = spread_hip_prone_move;
+                            spread_ = spread_hip_prone_move_;
                             break;
                         default:
                             break;
@@ -219,3 +256,4 @@ void Bf1::changeStance()
             break;
     }
 }
+

@@ -1,6 +1,5 @@
 ﻿// bf1_stat_calc.cpp
 /*
-TODO Move SpreadModifier struct into Game class
  TODO Finish ChangeStance function
     - pass instance of SpreadModifier to Simulation function
     - use SpreadData.at() instead of spread_ in Simulation function, with that instance of SpreadModifier

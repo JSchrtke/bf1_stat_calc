@@ -138,44 +138,10 @@ Bf1::SpreadModifier Bf1::GetSpreadModifier(AimState aimState, Movement movement,
 {
     SpreadModifier spreadModifier{};
 
-    switch(aimState)
-    {
-        case ADS:
-            spreadModifier.aimState = ADS;
-            break;
-        case Hipfire:
-            spreadModifier.aimState = Hipfire;
-            break;
-        default:
-            std::cout << "Error! invalid aim state" << std::endl;
-            break;
-    }
-    switch(movement)
-    {
-        case NotMoving:
-            spreadModifier.movement = NotMoving;
-            break;
-        case Moving:
-            spreadModifier.movement = Moving;
-            break;
-        default:
-            std::cout << "Error! invalid movement state" << std::endl;
-            break;
-    }
-    switch(stance)
-    {
-        case Standing:
-            spreadModifier.stance = Standing;
-            break;
-        case Crouching:
-            spreadModifier.stance = Crouching;
-            break;
-        case Prone:
-            spreadModifier.stance = Prone;
-            break;
-        default:
-            std::cout << "Error! invalid stance" << std::endl;
-    }
+    spreadModifier.aimState = aimState;
+    spreadModifier.movement = movement;
+    spreadModifier.stance = stance;
+
     return spreadModifier;
 }
 
